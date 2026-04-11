@@ -25,9 +25,13 @@ export default function KartaPage() {
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => {
-      setUserId(data.user?.id ?? null);
-    });
+    supabase.auth.getUser()
+      .then(({ data }) => {
+        setUserId(data.user?.id ?? null);
+      })
+      .catch(() => {
+        setUserId(null);
+      });
   }, []);
 
   useEffect(() => {
