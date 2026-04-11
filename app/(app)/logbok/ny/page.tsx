@@ -1,8 +1,8 @@
 // app/(app)/logbok/ny/page.tsx
 'use client';
 
-import { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useRef, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -19,8 +19,9 @@ function getLocalDatetimeString() {
   return new Date(now.getTime() - offset).toISOString().slice(0, 16);
 }
 
-export default function NyFangstPage() {
+function NyFangstForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [species, setSpecies] = useState('');
@@ -34,6 +35,16 @@ export default function NyFangstPage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [gpsLoading, setGpsLoading] = useState(false);
+
+  useEffect(() => {
+    const qLat = searchParams.get('lat');
+    const qLng = searchParams.get('lng');
+    if (qLat && qLng) {
+      setLat(parseFloat(qLat));
+      setLng(parseFloat(qLng));
+      setLocationText('Karta-position');
+    }
+  }, [searchParams]);
 
   const parsedWeight = parseFloat(weightKg);
   const parsedLength = parseFloat(lengthCm);
@@ -218,5 +229,13 @@ export default function NyFangstPage() {
         </Button>
       </Box>
     </Box>
+  );
+}
+
+export default function NyFangstPage() {
+  return (
+    <Suspense>
+      <NyFangstForm />
+    </Suspense>
   );
 }
