@@ -35,6 +35,7 @@ function NyFangstForm() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [gpsLoading, setGpsLoading] = useState(false);
+  const [gpsError, setGpsError] = useState<string | null>(null);
 
   useEffect(() => {
     const qLat = searchParams.get('lat');
@@ -72,8 +73,12 @@ function NyFangstForm() {
   }
 
   function handleGetGps() {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation) {
+      setGpsError('GPS stöds inte av din enhet.');
+      return;
+    }
     setGpsLoading(true);
+    setGpsError(null);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setLat(pos.coords.latitude);
@@ -82,8 +87,10 @@ function NyFangstForm() {
         setGpsLoading(false);
       },
       () => {
+        setGpsError('Kunde inte hämta position. Kontrollera att appen har tillstånd att använda platsinformation.');
         setGpsLoading(false);
-      }
+      },
+      { timeout: 10000 }
     );
   }
 
@@ -187,6 +194,11 @@ function NyFangstForm() {
           >
             {lat ? 'GPS-position hämtad' : 'Hämta GPS-position'}
           </Button>
+          {gpsError && (
+            <Typography variant="caption" sx={{ color: 'error.main' }}>
+              {gpsError}
+            </Typography>
+          )}
           <TextField
             label="Plats (fritext)"
             value={locationText}
