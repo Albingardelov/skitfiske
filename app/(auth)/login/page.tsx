@@ -50,7 +50,7 @@ export default function LoginPage() {
       }}
     >
       <Image
-        src="/SkitfiskeLogo.png"
+        src="/logo.png"
         alt="Skitfiske"
         width={180}
         height={180}
