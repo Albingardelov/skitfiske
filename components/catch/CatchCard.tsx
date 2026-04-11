@@ -21,7 +21,7 @@ export default function CatchCard({ catch: c }: Props) {
     <Card sx={{ mb: 1.5, mx: 2, bgcolor: 'background.paper' }}>
       <CardContent sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
         <Box sx={{ flex: 1 }}>
-          <Typography variant="subtitle1" fontWeight={700}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
             {c.species}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
