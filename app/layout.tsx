@@ -5,6 +5,11 @@ export const metadata: Metadata = {
   title: 'Hooked',
   description: 'Fiskeklubbens app — logga fångster, chatta och tävla',
   manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Hooked',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
