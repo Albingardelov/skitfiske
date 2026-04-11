@@ -1,7 +1,9 @@
 import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import NextLink from 'next/link';
 import type { Catch } from '@/types/catch';
 
 interface Props {
@@ -19,6 +21,7 @@ export default function CatchCard({ catch: c }: Props) {
 
   return (
     <Card sx={{ mb: 1.5, mx: 2, bgcolor: 'background.paper' }}>
+      <CardActionArea component={NextLink} href={`/logbok/${c.id}`}>
       <CardContent sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
         <Box sx={{ flex: 1 }}>
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
@@ -45,6 +48,7 @@ export default function CatchCard({ catch: c }: Props) {
           />
         )}
       </CardContent>
+      </CardActionArea>
     </Card>
   );
 }

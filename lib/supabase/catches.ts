@@ -31,6 +31,17 @@ export async function insertCatch(entry: InsertCatch): Promise<void> {
   if (error) throw error;
 }
 
+export async function fetchCatch(id: string): Promise<Catch | null> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('catches')
+    .select('*')
+    .eq('id', id)
+    .single();
+  if (error) return null;
+  return data;
+}
+
 export async function uploadCatchImage(userId: string, file: File): Promise<string> {
   const supabase = createClient();
   const ext = file.name.split('.').pop() ?? 'jpg';

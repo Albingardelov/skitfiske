@@ -1,0 +1,121 @@
+// app/(app)/logbok/[id]/page.tsx
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import { ArrowLeft, Map } from 'lucide-react';
+import { fetchCatch } from '@/lib/supabase/catches';
+import type { Catch } from '@/types/catch';
+
+export default function FangstDetailPage() {
+  const router = useRouter();
+  const { id } = useParams<{ id: string }>();
+  const [catch_, setCatch_] = useState<Catch | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchCatch(id)
+      .then(setCatch_)
+      .catch(() => setCatch_(null))
+      .finally(() => setIsLoading(false));
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100vh - 64px)' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (!catch_) {
+    return (
+      <Box sx={{ px: 2, pt: 3 }}>
+        <IconButton onClick={() => router.back()} aria-label="Tillbaka">
+          <ArrowLeft size={24} />
+        </IconButton>
+        <Typography variant="body1" sx={{ mt: 2 }}>
+          Fångsten hittades inte.
+        </Typography>
+      </Box>
+    );
+  }
+
+  const date = new Date(catch_.caught_at).toLocaleString('sv-SE', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  return (
+    <Box sx={{ pb: 4 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+          px: 1,
+          py: 1,
+          position: 'sticky',
+          top: 0,
+          bgcolor: 'background.default',
+          zIndex: 10,
+        }}
+      >
+        <IconButton onClick={() => router.back()} aria-label="Tillbaka">
+          <ArrowLeft size={24} />
+        </IconButton>
+        <Typography variant="h6" sx={{ fontWeight: 700 }}>
+          {catch_.species}
+        </Typography>
+      </Box>
+
+      {catch_.image_url && (
+        <Box
+          component="img"
+          src={catch_.image_url}
+          alt={catch_.species}
+          sx={{ width: '100%', maxHeight: 300, objectFit: 'cover' }}
+        />
+      )}
+
+      <Box sx={{ px: 2, pt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+        <Typography variant="h5" sx={{ fontWeight: 700 }}>
+          {catch_.species}
+        </Typography>
+        <Typography variant="body1">
+          {catch_.weight_kg} kg · {catch_.length_cm} cm
+        </Typography>
+        {catch_.location_text && (
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {catch_.location_text}
+          </Typography>
+        )}
+        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          {date}
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          {catch_.full_name}
+        </Typography>
+
+        {catch_.lat !== null && catch_.lng !== null && (
+          <Button
+            variant="outlined"
+            startIcon={<Map size={16} />}
+            onClick={() => router.push('/karta')}
+            sx={{ mt: 1, alignSelf: 'flex-start' }}
+          >
+            Visa på karta
+          </Button>
+        )}
+      </Box>
+    </Box>
+  );
+}
