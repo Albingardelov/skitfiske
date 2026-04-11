@@ -20,8 +20,6 @@ export default function KartaPage() {
   const [catches, setCatches] = useState<Catch[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
-  const [fabLat, setFabLat] = useState<number | null>(null);
-  const [fabLng, setFabLng] = useState<number | null>(null);
 
   useEffect(() => {
     const supabase = createClient();
@@ -45,16 +43,11 @@ export default function KartaPage() {
   }, [filter, userId]);
 
   function handleMapClick(lat: number, lng: number) {
-    setFabLat(lat);
-    setFabLng(lng);
+    router.push(`/logbok/ny?lat=${lat}&lng=${lng}`);
   }
 
   function handleFab() {
-    if (fabLat !== null && fabLng !== null) {
-      router.push(`/logbok/ny?lat=${fabLat}&lng=${fabLng}`);
-    } else {
-      router.push('/logbok/ny');
-    }
+    router.push('/logbok/ny');
   }
 
   return (
@@ -68,7 +61,7 @@ export default function KartaPage() {
         sx={{
           position: 'absolute',
           top: 8,
-          left: 8,
+          right: 8,
           zIndex: 1000,
           bgcolor: 'background.paper',
           borderRadius: 1,
