@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 import Link from '@mui/material/Link';
 import NextLink from 'next/link';
+import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 
 export default function LoginPage() {
@@ -48,9 +49,13 @@ export default function LoginPage() {
         bgcolor: 'background.default',
       }}
     >
-      <Typography variant="h4" sx={{ mb: 1, fontWeight: 700 }}>
-        Hooked
-      </Typography>
+      <Image
+        src="/SkitfiskeLogo.png"
+        alt="Skitfiske"
+        width={180}
+        height={180}
+        style={{ marginBottom: 16 }}
+      />
       <Typography variant="body2" sx={{ mb: 4, color: 'text.secondary' }}>
         Fiskeklubbens app
       </Typography>
