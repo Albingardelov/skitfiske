@@ -1,3 +1,4 @@
+// lib/supabase/catches.ts
 import { createClient } from '@/lib/supabase/client';
 import type { Catch, InsertCatch } from '@/types/catch';
 
