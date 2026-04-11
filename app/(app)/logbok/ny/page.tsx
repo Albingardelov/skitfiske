@@ -35,10 +35,12 @@ export default function NyFangstPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [gpsLoading, setGpsLoading] = useState(false);
 
+  const parsedWeight = parseFloat(weightKg);
+  const parsedLength = parseFloat(lengthCm);
   const canSave =
     species.trim().length > 0 &&
-    weightKg.trim().length > 0 &&
-    lengthCm.trim().length > 0 &&
+    !isNaN(parsedWeight) && parsedWeight > 0 &&
+    !isNaN(parsedLength) && parsedLength > 0 &&
     caughtAt.length > 0 &&
     !isSaving;
 
@@ -49,6 +51,7 @@ export default function NyFangstPage() {
       alert('Bilden får max vara 5MB.');
       return;
     }
+    if (imagePreview) URL.revokeObjectURL(imagePreview);
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
   }
@@ -87,8 +90,8 @@ export default function NyFangstPage() {
         user_id: userData.user.id,
         full_name: userData.user.user_metadata?.full_name ?? 'Anonym',
         species: species.trim(),
-        weight_kg: parseFloat(weightKg),
-        length_cm: parseFloat(lengthCm),
+        weight_kg: parsedWeight,
+        length_cm: parsedLength,
         location_text: locationText.trim() || null,
         lat,
         lng,
@@ -96,6 +99,7 @@ export default function NyFangstPage() {
         caught_at: new Date(caughtAt).toISOString(),
       });
 
+      setIsSaving(false);
       router.push('/logbok');
     } catch {
       alert('Kunde inte spara fångsten. Försök igen.');
