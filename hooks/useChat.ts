@@ -1,5 +1,5 @@
 // hooks/useChat.ts
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { fetchMessages, insertMessage, uploadChatImage } from '@/lib/supabase/chat';
 import type { Message } from '@/types/chat';
@@ -8,6 +8,7 @@ export function useChat(channelId: string, userId: string, fullName: string) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const pendingIdsRef = useRef<string[]>([]);
 
   useEffect(() => {
     if (!channelId) return;
@@ -45,11 +46,14 @@ export function useChat(channelId: string, userId: string, fullName: string) {
           if (!mounted) return;
           const newMsg = payload.new as Message;
           setMessages((prev) => {
-            // Replace optimistic message from same user
+            // Replace tracked optimistic message from same user (in insertion order)
             const optimisticIndex = prev.findIndex(
-              (m) => m.status === 'pending' && m.user_id === newMsg.user_id
+              (m) => pendingIdsRef.current.includes(m.id) && m.user_id === newMsg.user_id
             );
             if (optimisticIndex !== -1) {
+              pendingIdsRef.current = pendingIdsRef.current.filter(
+                (id) => id !== prev[optimisticIndex].id
+              );
               const next = [...prev];
               next[optimisticIndex] = newMsg;
               return next;
@@ -81,6 +85,7 @@ export function useChat(channelId: string, userId: string, fullName: string) {
         status: 'pending',
       };
 
+      pendingIdsRef.current.push(optimisticId);
       setMessages((prev) => [...prev, optimistic]);
 
       try {
@@ -96,6 +101,7 @@ export function useChat(channelId: string, userId: string, fullName: string) {
           image_url: imageUrl,
         });
       } catch {
+        pendingIdsRef.current = pendingIdsRef.current.filter((id) => id !== optimisticId);
         setMessages((prev) =>
           prev.map((m) => (m.id === optimisticId ? { ...m, status: 'error' } : m))
         );
