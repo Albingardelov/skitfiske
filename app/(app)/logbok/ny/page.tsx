@@ -40,9 +40,13 @@ function NyFangstForm() {
     const qLat = searchParams.get('lat');
     const qLng = searchParams.get('lng');
     if (qLat && qLng) {
-      setLat(parseFloat(qLat));
-      setLng(parseFloat(qLng));
-      setLocationText('Karta-position');
+      const lat = parseFloat(qLat);
+      const lng = parseFloat(qLng);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        setLat(lat);
+        setLng(lng);
+        setLocationText('Karta-position');
+      }
     }
   }, [searchParams]);
 
