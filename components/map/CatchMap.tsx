@@ -25,9 +25,14 @@ export default function CatchMap({ catches, onMapClick }: Props) {
 
   useEffect(() => {
     if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition((pos) => {
-      setUserPos([pos.coords.latitude, pos.coords.longitude]);
-    });
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setUserPos([pos.coords.latitude, pos.coords.longitude]);
+      },
+      () => {
+        // Permission denied or error — userPos stays null, CircleMarker not shown
+      }
+    );
   }, []);
 
   return (
