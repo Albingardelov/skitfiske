@@ -40,6 +40,14 @@ export default function MessageList({ messages, currentUserId, onDelete, onEdit 
         overflowX: 'hidden',
         WebkitOverflowScrolling: 'touch',
         py: 2,
+        scrollbarWidth: 'thin',
+        scrollbarColor: 'rgba(128,128,128,0.25) transparent',
+        '&::-webkit-scrollbar': { width: '4px' },
+        '&::-webkit-scrollbar-track': { bgcolor: 'transparent' },
+        '&::-webkit-scrollbar-thumb': {
+          bgcolor: 'rgba(128,128,128,0.25)',
+          borderRadius: '2px',
+        },
       }}
     >
       {messages.map((message, index) => {
@@ -53,23 +61,25 @@ export default function MessageList({ messages, currentUserId, onDelete, onEdit 
                   display: 'flex',
                   alignItems: 'center',
                   gap: 1.5,
-                  px: 2,
-                  py: 1.5,
+                  px: 3,
+                  py: 2,
                 }}
               >
-                <Box sx={{ flex: 1, height: '1px', bgcolor: 'divider' }} />
+                <Box sx={{ flex: 1, height: '1px', bgcolor: 'divider', opacity: 0.6 }} />
                 <Typography
                   sx={{
                     fontFamily: 'var(--font-work), var(--font-sans), sans-serif',
-                    fontSize: '0.65rem',
-                    fontWeight: 600,
-                    letterSpacing: '0.16em',
-                    color: 'text.secondary',
+                    fontSize: '0.625rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    color: 'text.disabled',
+                    px: 0.5,
                   }}
                 >
                   {dayDividerLabel(message.created_at)}
                 </Typography>
-                <Box sx={{ flex: 1, height: '1px', bgcolor: 'divider' }} />
+                <Box sx={{ flex: 1, height: '1px', bgcolor: 'divider', opacity: 0.6 }} />
               </Box>
             )}
             <MessageBubble

@@ -61,6 +61,7 @@ export default function ChatTabs({ channels, activeChannelId, onChannelChange }:
               },
             })}
           >
+            <Box component="span" sx={{ opacity: 0.45, mr: 0.4, fontWeight: 400, fontSize: '0.75rem' }}>#</Box>
             {channel.label}
           </Button>
         );

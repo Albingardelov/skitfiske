@@ -40,7 +40,7 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
     : 'transparent';
   const otherBubbleBg =
     theme.palette.mode === 'dark'
-      ? alpha(theme.palette.common.white, 0.055)
+      ? alpha(theme.palette.common.white, 0.09)
       : '#ECEAE6';
   const isPending = message.status === 'pending';
   const isError = message.status === 'error';
@@ -85,7 +85,7 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
         display: 'flex',
         flexDirection: 'column',
         alignItems: isOwn ? 'flex-end' : 'flex-start',
-        mb: 1.25,
+        mb: 0.75,
         px: 2,
       }}
     >
@@ -124,7 +124,7 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
             opacity: isPending ? 0.75 : 1,
             border: isError ? '2px solid' : 'none',
             borderColor: isError ? 'error.main' : 'transparent',
-            boxShadow: isOwn || isError ? 'none' : '0 2px 12px rgba(0,0,0,0.12)',
+            boxShadow: isOwn || isError ? 'none' : (isLight ? '0 1px 3px rgba(0,0,0,0.07)' : '0 1px 3px rgba(0,0,0,0.28)'),
           }}
         >
           {message.image_url && (
@@ -215,11 +215,11 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
         variant="caption"
         sx={{
           alignSelf: isOwn ? 'flex-end' : 'flex-start',
-          ml: isOwn ? 0 : 5.5,
-          color: 'text.secondary',
-          mt: 0.35,
-          opacity: 0.75,
-          fontSize: '0.68rem',
+          ml: isOwn ? 0 : 5.25,
+          color: 'text.disabled',
+          mt: 0.25,
+          fontSize: '0.625rem',
+          letterSpacing: '0.02em',
           fontFamily: 'var(--font-work), var(--font-sans), sans-serif',
         }}
       >

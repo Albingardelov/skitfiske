@@ -19,7 +19,8 @@ export default function AppRouteShell({ children }: { children: React.ReactNode 
   return (
     <Box
       sx={{
-        minHeight: '100dvh',
+        height: '100dvh',
+        overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
         bgcolor: 'transparent',
@@ -33,6 +34,7 @@ export default function AppRouteShell({ children }: { children: React.ReactNode 
           minHeight: 0,
           display: 'flex',
           flexDirection: 'column',
+          overflowY: 'auto',
         }}
       >
         {children}
