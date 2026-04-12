@@ -72,8 +72,8 @@ export default function EditorialShellHeader() {
       <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
         <ColorModeMenuButton aria-label="Välj tema" sx={{ ml: 0 }} />
         <IconButton
-          onClick={() => router.push('/hem')}
-          aria-label="Inställningar"
+          onClick={() => router.push('/klubb')}
+          aria-label="Klubbinställningar"
           size="small"
           sx={{ color: 'text.secondary' }}
         >
