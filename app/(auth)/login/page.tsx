@@ -50,10 +50,10 @@ export default function LoginPage() {
       }}
     >
       <Image
-        src="/logo.png"
+        src="/logo.svg"
         alt="Skitfiske"
-        width={180}
-        height={180}
+        width={200}
+        height={80}
         style={{ marginBottom: 16 }}
       />
       <Typography variant="body2" sx={{ mb: 4, color: 'text.secondary' }}>
