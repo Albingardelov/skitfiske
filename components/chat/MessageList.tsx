@@ -8,9 +8,11 @@ import type { Message } from '@/types/chat';
 interface Props {
   messages: Message[];
   currentUserId: string;
+  onDelete: (id: string) => void;
+  onEdit: (id: string, content: string) => void;
 }
 
-export default function MessageList({ messages, currentUserId }: Props) {
+export default function MessageList({ messages, currentUserId, onDelete, onEdit }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -36,6 +38,8 @@ export default function MessageList({ messages, currentUserId }: Props) {
           key={message.id}
           message={message}
           isOwn={message.user_id === currentUserId}
+          onDelete={onDelete}
+          onEdit={onEdit}
         />
       ))}
       <div ref={bottomRef} />

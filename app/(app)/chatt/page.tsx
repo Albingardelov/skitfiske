@@ -38,7 +38,7 @@ export default function ChattPage() {
       .catch(() => setInitError(true));
   }, []);
 
-  const { messages, sendMessage, isLoading, error } = useChat(activeChannelId, userId, fullName);
+  const { messages, sendMessage, removeMessage, editMessage, isLoading, error } = useChat(activeChannelId, userId, fullName);
 
   if (initError) {
     return (
@@ -82,7 +82,7 @@ export default function ChattPage() {
           {error}
         </Typography>
       )}
-      <MessageList messages={messages} currentUserId={userId} />
+      <MessageList messages={messages} currentUserId={userId} onDelete={removeMessage} onEdit={editMessage} />
       <MessageInput onSend={sendMessage} disabled={isLoading || !userId} />
     </Box>
   );

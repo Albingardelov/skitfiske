@@ -27,6 +27,18 @@ export async function insertMessage(message: {
   if (error) throw error;
 }
 
+export async function deleteMessage(id: string): Promise<void> {
+  const supabase = createClient();
+  const { error } = await supabase.from('messages').delete().eq('id', id);
+  if (error) throw error;
+}
+
+export async function updateMessage(id: string, content: string): Promise<void> {
+  const supabase = createClient();
+  const { error } = await supabase.from('messages').update({ content }).eq('id', id);
+  if (error) throw error;
+}
+
 export async function uploadChatImage(userId: string, file: File): Promise<string> {
   const supabase = createClient();
   const ext = file.name.split('.').pop() ?? 'jpg';
