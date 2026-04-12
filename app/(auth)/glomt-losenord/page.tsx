@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -41,15 +42,15 @@ export default function ForgotPasswordPage() {
     return (
       <Box
         sx={{
-          minHeight: '100vh',
+          minHeight: '100dvh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          px: 3,
+          px: 2,
           bgcolor: 'transparent',
         }}
       >
-        <Alert severity="success" sx={{ maxWidth: 400, width: '100%' }}>
+        <Alert severity="success" sx={{ maxWidth: 420, width: '100%', borderRadius: 3 }}>
           Vi har skickat en återställningslänk till din e-post.
         </Alert>
       </Box>
@@ -59,12 +60,13 @@ export default function ForgotPasswordPage() {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
+        minHeight: '100dvh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        px: 3,
+        px: 2,
+        py: 4,
         bgcolor: 'transparent',
       }}
     >
@@ -75,42 +77,57 @@ export default function ForgotPasswordPage() {
         height={68}
         style={{ marginBottom: 12 }}
       />
-      <Typography variant="h4" sx={{ mb: 1.5, textAlign: 'center', letterSpacing: '-0.03em' }}>
+      <Typography variant="h4" sx={{ mb: 1, textAlign: 'center', letterSpacing: '-0.03em' }}>
         Glömt lösenord?
       </Typography>
       <Typography
-        variant="body1"
-        sx={{ mb: 4, color: 'text.secondary', textAlign: 'center', maxWidth: 320 }}
+        variant="body2"
+        sx={{ mb: 3, color: 'text.secondary', textAlign: 'center', maxWidth: 340 }}
       >
         Ange din e-postadress så skickar vi en återställningslänk.
       </Typography>
 
-      <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%', maxWidth: 400 }}>
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
+      <Paper
+        elevation={0}
+        sx={{
+          width: '100%',
+          maxWidth: 420,
+          p: { xs: 2.5, sm: 3 },
+          borderRadius: 4,
+          border: '1px solid',
+          borderColor: 'divider',
+          bgcolor: 'rgba(18, 26, 28, 0.65)',
+          backdropFilter: 'blur(12px)',
+        }}
+      >
+        <Box component="form" onSubmit={handleSubmit}>
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
 
-        <TextField
-          fullWidth
-          label="E-postadress"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          autoComplete="email"
-          sx={{ mb: 3 }}
-        />
+          <TextField
+            fullWidth
+            label="E-postadress"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+            variant="filled"
+            sx={{ mb: 3 }}
+          />
 
-        <Button type="submit" variant="contained" fullWidth disabled={loading} sx={{ mb: 3 }}>
-          {loading ? 'Skickar...' : 'Skicka återställningslänk'}
-        </Button>
+          <Button type="submit" variant="contained" fullWidth disabled={loading} sx={{ mb: 2 }}>
+            {loading ? 'Skickar...' : 'Skicka återställningslänk'}
+          </Button>
 
-        <Link component={NextLink} href="/login" color="primary">
-          Tillbaka till inloggning
-        </Link>
-      </Box>
+          <Link component={NextLink} href="/login" color="primary" sx={{ fontSize: '0.875rem' }}>
+            Tillbaka till inloggning
+          </Link>
+        </Box>
+      </Paper>
     </Box>
   );
 }

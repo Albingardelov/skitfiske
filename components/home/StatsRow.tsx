@@ -52,9 +52,9 @@ export default function StatsRow({ count, heaviestKg, longestCm }: Props) {
         py: 2.25,
         px: 1,
         bgcolor: 'background.paper',
-        borderRadius: 2,
-        border: '1px solid',
-        borderColor: 'divider',
+        borderRadius: 3,
+        border: 'none',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.22)',
         mb: 2,
       }}
     >

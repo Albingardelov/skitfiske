@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -58,15 +59,15 @@ export default function RegisterPage() {
     return (
       <Box
         sx={{
-          minHeight: '100vh',
+          minHeight: '100dvh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          px: 3,
+          px: 2,
           bgcolor: 'transparent',
         }}
       >
-        <Alert severity="success" sx={{ maxWidth: 400, width: '100%' }}>
+        <Alert severity="success" sx={{ maxWidth: 420, width: '100%', borderRadius: 3 }}>
           Konto skapat! Kontrollera din e-post för en bekräftelselänk.
         </Alert>
       </Box>
@@ -76,12 +77,13 @@ export default function RegisterPage() {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
+        minHeight: '100dvh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        px: 3,
+        px: 2,
+        py: 4,
         bgcolor: 'transparent',
       }}
     >
@@ -92,33 +94,86 @@ export default function RegisterPage() {
         height={68}
         style={{ marginBottom: 12 }}
       />
-      <Typography variant="h4" sx={{ mb: 1, textAlign: 'center', letterSpacing: '-0.03em' }}>
+      <Typography variant="h4" sx={{ mb: 0.5, textAlign: 'center', letterSpacing: '-0.03em' }}>
         Skapa konto
       </Typography>
-      <Typography variant="body2" sx={{ mb: 3, color: 'text.secondary', textAlign: 'center' }}>
-        Bli medlem i klubben
+      <Typography variant="body2" sx={{ mb: 3, color: 'text.secondary', textAlign: 'center', maxWidth: 360 }}>
+        Bli medlem och få tillgång till loggbok, karta och chatt.
       </Typography>
 
-      <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%', maxWidth: 400 }}>
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
+      <Paper
+        elevation={0}
+        sx={{
+          width: '100%',
+          maxWidth: 420,
+          p: { xs: 2.5, sm: 3 },
+          borderRadius: 4,
+          border: '1px solid',
+          borderColor: 'divider',
+          bgcolor: 'rgba(18, 26, 28, 0.65)',
+          backdropFilter: 'blur(12px)',
+        }}
+      >
+        <Box component="form" onSubmit={handleSubmit}>
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
 
-        <TextField fullWidth label="Namn" value={name} onChange={(e) => setName(e.target.value)} required autoComplete="name" sx={{ mb: 2 }} />
-        <TextField fullWidth label="E-postadress" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" sx={{ mb: 2 }} />
-        <TextField fullWidth label="Lösenord" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="new-password" sx={{ mb: 2 }} />
-        <TextField fullWidth label="Bekräfta lösenord" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required autoComplete="new-password" sx={{ mb: 3 }} />
+          <TextField
+            fullWidth
+            label="Namn"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            autoComplete="name"
+            variant="filled"
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            fullWidth
+            label="E-postadress"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+            variant="filled"
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            fullWidth
+            label="Lösenord"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            autoComplete="new-password"
+            variant="filled"
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            fullWidth
+            label="Bekräfta lösenord"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            autoComplete="new-password"
+            variant="filled"
+            sx={{ mb: 3 }}
+          />
 
-        <Button type="submit" variant="contained" fullWidth disabled={loading} sx={{ mb: 3 }}>
-          {loading ? 'Skapar konto...' : 'Registrera dig'}
-        </Button>
+          <Button type="submit" variant="contained" fullWidth disabled={loading} sx={{ mb: 2 }}>
+            {loading ? 'Skapar konto...' : 'Registrera dig'}
+          </Button>
 
-        <Link component={NextLink} href="/login" color="primary">
-          Har du redan ett konto? Logga in
-        </Link>
-      </Box>
+          <Link component={NextLink} href="/login" color="primary" sx={{ fontSize: '0.875rem' }}>
+            Har du redan ett konto? Logga in
+          </Link>
+        </Box>
+      </Paper>
     </Box>
   );
 }

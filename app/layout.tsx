@@ -24,13 +24,13 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Hooked',
+  title: 'Skitfiske',
   description: 'Fiskeklubbens app — logga fångster, chatta och tävla',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Hooked',
+    title: 'Skitfiske',
   },
 };
 

@@ -1,9 +1,9 @@
 {
-  "name": "Hooked",
-  "short_name": "Hooked",
+  "name": "Skitfiske",
+  "short_name": "Skitfiske",
   "description": "Fiskeklubbens app — logga fångster, chatta och tävla",
-  "theme_color": "#131820",
-  "background_color": "#0c0f14",
+  "theme_color": "#121a1c",
+  "background_color": "#0a0f11",
   "display": "standalone",
   "orientation": "portrait",
   "start_url": "/hem",

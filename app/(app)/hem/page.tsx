@@ -3,12 +3,25 @@
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import CircularProgress from '@mui/material/CircularProgress';
+import Skeleton from '@mui/material/Skeleton';
 import { createClient } from '@/lib/supabase/client';
 import { fetchMyCatches, fetchAllCatches } from '@/lib/supabase/catches';
 import StatsRow from '@/components/home/StatsRow';
 import CatchCard from '@/components/catch/CatchCard';
 import type { Catch } from '@/types/catch';
+
+function HemSkeleton() {
+  return (
+    <Box sx={{ px: 2, pt: 3, pb: 2 }}>
+      <Skeleton variant="text" width="55%" height={44} sx={{ mb: 1, borderRadius: 1 }} />
+      <Skeleton variant="text" width="85%" height={22} sx={{ mb: 3, borderRadius: 1 }} />
+      <Skeleton variant="rounded" height={100} sx={{ mb: 2, borderRadius: 3 }} />
+      <Skeleton variant="text" width={140} height={24} sx={{ mb: 1.5 }} />
+      <Skeleton variant="rounded" height={200} sx={{ mb: 2, borderRadius: 3, mx: 0 }} />
+      <Skeleton variant="rounded" height={200} sx={{ borderRadius: 3, mx: 0 }} />
+    </Box>
+  );
+}
 
 export default function HemPage() {
   const [firstName, setFirstName] = useState<string>('');
@@ -49,15 +62,8 @@ export default function HemPage() {
 
   if (isLoading) {
     return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: 'calc(100vh - 64px)',
-        }}
-      >
-        <CircularProgress />
+      <Box sx={{ minHeight: 'calc(100dvh - 56px)' }}>
+        <HemSkeleton />
       </Box>
     );
   }

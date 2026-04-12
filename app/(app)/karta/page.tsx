@@ -62,7 +62,7 @@ function KartaContent() {
   }
 
   return (
-    <Box sx={{ height: 'calc(100vh - 64px)', position: 'relative' }}>
+    <Box sx={{ height: 'calc(100dvh - 56px)', position: 'relative' }}>
       {/* Filter toggle */}
       <ToggleButtonGroup
         value={filter}
@@ -106,7 +106,11 @@ function KartaContent() {
       <Fab
         color="primary"
         onClick={handleFab}
-        sx={{ position: 'fixed', bottom: 80, right: 16 }}
+        sx={{
+          position: 'fixed',
+          right: 16,
+          bottom: 'calc(96px + env(safe-area-inset-bottom, 0px))',
+        }}
         aria-label="Registrera fångst"
       >
         <Plus size={24} />

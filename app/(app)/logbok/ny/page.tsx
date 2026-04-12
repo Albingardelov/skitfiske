@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import CircularProgress from '@mui/material/CircularProgress';
+import Snackbar from '@mui/material/Snackbar';
 import { ArrowLeft, MapPin, Camera } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { insertCatch, uploadCatchImage } from '@/lib/supabase/catches';
@@ -38,6 +39,7 @@ function NyFangstForm() {
   const [isSaving, setIsSaving] = useState(false);
   const [gpsLoading, setGpsLoading] = useState(false);
   const [gpsError, setGpsError] = useState<string | null>(null);
+  const [snackbar, setSnackbar] = useState<string | null>(null);
 
   useEffect(() => {
     const qLat = searchParams.get('lat');
@@ -66,7 +68,7 @@ function NyFangstForm() {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > 5 * 1024 * 1024) {
-      alert('Bilden får max vara 5MB.');
+      setSnackbar('Bilden får max vara 5 MB.');
       return;
     }
     if (imagePreview) URL.revokeObjectURL(imagePreview);
@@ -127,7 +129,7 @@ function NyFangstForm() {
       setIsSaving(false);
       router.push('/logbok');
     } catch {
-      alert('Kunde inte spara fångsten. Försök igen.');
+      setSnackbar('Kunde inte spara fångsten. Försök igen.');
       setIsSaving(false);
     }
   }
@@ -258,6 +260,13 @@ function NyFangstForm() {
           {isSaving ? <CircularProgress size={24} color="inherit" /> : 'Spara fångst'}
         </Button>
       </Box>
+      <Snackbar
+        open={Boolean(snackbar)}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar(null)}
+        message={snackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      />
     </Box>
   );
 }

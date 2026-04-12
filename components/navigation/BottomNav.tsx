@@ -1,60 +1,101 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { Home, MessageCircle, MapPin, BookOpen } from 'lucide-react';
 
 const navItems = [
-  { label: 'Hem', icon: <Home size={24} />, route: '/hem' },
-  { label: 'Chatt', icon: <MessageCircle size={24} />, route: '/chatt' },
-  { label: 'Karta', icon: <MapPin size={24} />, route: '/karta' },
-  { label: 'Logbok', icon: <BookOpen size={24} />, route: '/logbok' },
+  { label: 'Hem', icon: Home, route: '/hem' },
+  { label: 'Chatt', icon: MessageCircle, route: '/chatt' },
+  { label: 'Karta', icon: MapPin, route: '/karta' },
+  { label: 'Logbok', icon: BookOpen, route: '/logbok' },
 ] as const;
 
 export default function BottomNav() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const currentValue = navItems.findIndex((item) => pathname.startsWith(item.route));
-
   return (
-    <Paper
-      square
+    <Box
+      component="nav"
       sx={{
         position: 'fixed',
         bottom: 0,
         left: 0,
         right: 0,
         zIndex: 1000,
-        bgcolor: 'background.paper',
-        borderTop: 1,
+        px: 1.5,
+        pt: 1,
+        pb: 'calc(10px + env(safe-area-inset-bottom, 0px))',
+        bgcolor: 'rgba(18, 26, 28, 0.92)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderTop: '1px solid',
         borderColor: 'divider',
-        boxShadow: '0 -4px 24px rgba(0,0,0,0.35)',
+        boxShadow: '0 -8px 32px rgba(0,0,0,0.35)',
       }}
-      elevation={0}
     >
-      <BottomNavigation
-        value={currentValue}
-        onChange={(_, newValue: number) => {
-          router.push(navItems[newValue].route);
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'stretch',
+          gap: 0.5,
+          maxWidth: 480,
+          mx: 'auto',
         }}
-        sx={{ minHeight: 64, bgcolor: 'transparent' }}
       >
-        {navItems.map((item) => (
-          <BottomNavigationAction
-            key={item.route}
-            label={item.label}
-            icon={item.icon}
-            sx={{
-              color: 'text.secondary',
-              '&.Mui-selected': { color: 'primary.light' },
-              minWidth: 0,
-            }}
-          />
-        ))}
-      </BottomNavigation>
-    </Paper>
+        {navItems.map((item) => {
+          const selected = pathname.startsWith(item.route);
+          const Icon = item.icon;
+          return (
+            <Box
+              key={item.route}
+              component="button"
+              type="button"
+              onClick={() => router.push(item.route)}
+              sx={{
+                flex: 1,
+                minHeight: 52,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 0.25,
+                border: 'none',
+                cursor: 'pointer',
+                borderRadius: 999,
+                px: 0.5,
+                py: 0.75,
+                bgcolor: selected ? 'action.selected' : 'transparent',
+                color: selected ? 'primary.light' : 'text.secondary',
+                transition: 'background-color 0.15s ease, color 0.15s ease',
+                '&:hover': {
+                  bgcolor: selected ? 'action.selected' : 'action.hover',
+                  color: selected ? 'primary.light' : 'text.primary',
+                },
+                '&:active': {
+                  transform: 'scale(0.97)',
+                },
+              }}
+            >
+              <Icon size={22} strokeWidth={selected ? 2.25 : 2} aria-hidden />
+              <Typography
+                variant="caption"
+                sx={{
+                  fontSize: '0.65rem',
+                  fontWeight: selected ? 700 : 600,
+                  lineHeight: 1,
+                  letterSpacing: '0.02em',
+                }}
+              >
+                {item.label}
+              </Typography>
+            </Box>
+          );
+        })}
+      </Box>
+    </Box>
   );
 }

@@ -20,41 +20,71 @@ export default function CatchCard({ catch: c }: Props) {
   });
 
   return (
-    <Card sx={{ mb: 1.5, mx: 2, bgcolor: 'background.paper', overflow: 'hidden' }}>
+    <Card sx={{ mb: 2, mx: 2, bgcolor: 'background.paper', overflow: 'hidden' }}>
       <CardActionArea component={NextLink} href={`/logbok/${c.id}`}>
-      <CardContent sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
-        <Box sx={{ flex: 1 }}>
-          <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-            {c.species}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            {c.weight_kg} kg · {c.length_cm} cm
-          </Typography>
-          {c.location_text && (
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {c.location_text}
-            </Typography>
-          )}
-          <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-            {date}
-          </Typography>
-        </Box>
-        {c.image_url && (
+        {c.image_url ? (
           <Box
             component="img"
             src={c.image_url}
-            alt="Fångstbild"
+            alt={`Fångst: ${c.species}`}
             sx={{
-              width: 80,
-              height: 80,
+              width: '100%',
+              aspectRatio: '16 / 9',
               objectFit: 'cover',
-              borderRadius: 1,
-              border: '1px solid',
-              borderColor: 'divider',
+              display: 'block',
             }}
           />
+        ) : (
+          <Box
+            sx={{
+              width: '100%',
+              aspectRatio: '16 / 9',
+              bgcolor: 'rgba(255,255,255,0.04)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderBottom: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>
+              Ingen bild
+            </Typography>
+          </Box>
         )}
-      </CardContent>
+        <CardContent sx={{ pt: 2, pb: 2, px: 2 }}>
+          <Typography
+            variant="h6"
+            sx={{
+              fontFamily: 'var(--font-serif), Georgia, serif',
+              fontWeight: 600,
+              letterSpacing: '-0.02em',
+              lineHeight: 1.25,
+              mb: 0.75,
+            }}
+          >
+            {c.species}
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              color: 'text.secondary',
+              fontFeatureSettings: '"tnum"',
+              fontWeight: 500,
+              mb: 0.5,
+            }}
+          >
+            {c.weight_kg} kg · {c.length_cm} cm
+          </Typography>
+          {c.location_text && (
+            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 0.5 }}>
+              {c.location_text}
+            </Typography>
+          )}
+          <Typography variant="caption" sx={{ color: 'text.secondary', opacity: 0.85 }}>
+            {date}
+          </Typography>
+        </CardContent>
       </CardActionArea>
     </Card>
   );

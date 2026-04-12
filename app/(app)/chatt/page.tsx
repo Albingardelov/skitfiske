@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
-import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 import { createClient } from '@/lib/supabase/client';
 import { useChat } from '@/hooks/useChat';
@@ -11,6 +10,8 @@ import ChatTabs from '@/components/chat/ChatTabs';
 import MessageList from '@/components/chat/MessageList';
 import MessageInput from '@/components/chat/MessageInput';
 import type { Channel } from '@/types/chat';
+
+const mainH = 'calc(100dvh - 56px)';
 
 export default function ChattPage() {
   const [channels, setChannels] = useState<Channel[]>([]);
@@ -39,7 +40,11 @@ export default function ChattPage() {
       .catch(() => setInitError(true));
   }, []);
 
-  const { messages, sendMessage, removeMessage, editMessage, isLoading, error } = useChat(activeChannelId, userId, fullName);
+  const { messages, sendMessage, removeMessage, editMessage, isLoading, error } = useChat(
+    activeChannelId,
+    userId,
+    fullName,
+  );
 
   if (initError) {
     return (
@@ -48,7 +53,7 @@ export default function ChattPage() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          height: 'calc(100vh - 64px)',
+          height: mainH,
           px: 2,
         }}
       >
@@ -66,23 +71,23 @@ export default function ChattPage() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          height: 'calc(100vh - 64px)',
+          height: mainH,
         }}
       >
-        <CircularProgress />
+        <CircularProgress sx={{ color: 'primary.light' }} />
       </Box>
     );
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px)' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: mainH }}>
       <ChatTabs
         channels={channels}
         activeChannelId={activeChannelId}
         onChannelChange={setActiveChannelId}
       />
       {error && (
-        <Alert severity="error" sx={{ mx: 2, mt: 1, borderRadius: 2 }}>
+        <Alert severity="error" sx={{ mx: 2, mt: 1, borderRadius: 3 }}>
           {error}
         </Alert>
       )}

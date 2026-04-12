@@ -12,6 +12,9 @@ import Tooltip from '@mui/material/Tooltip';
 import { Check, MoreVertical, X } from 'lucide-react';
 import type { Message } from '@/types/chat';
 
+const ownBubbleBg = 'rgba(90, 158, 152, 0.28)';
+const otherBubbleBg = 'rgba(255, 255, 255, 0.055)';
+
 interface Props {
   message: Message;
   isOwn: boolean;
@@ -63,12 +66,12 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
         display: 'flex',
         flexDirection: 'column',
         alignItems: isOwn ? 'flex-end' : 'flex-start',
-        mb: 1,
+        mb: 1.25,
         px: 2,
       }}
     >
       {!isOwn && (
-        <Typography variant="caption" sx={{ color: 'text.secondary', mb: 0.5 }}>
+        <Typography variant="caption" sx={{ color: 'text.secondary', mb: 0.5, fontWeight: 500 }}>
           {message.full_name}
         </Typography>
       )}
@@ -76,77 +79,92 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
         sx={{
           display: 'flex',
           flexDirection: isOwn ? 'row-reverse' : 'row',
-          alignItems: 'flex-start',
-          gap: 0.25,
+          alignItems: 'flex-end',
+          gap: 0.5,
           maxWidth: '100%',
         }}
       >
         <Box
           sx={{
-            maxWidth: '75%',
-            bgcolor: isOwn ? 'primary.main' : 'background.paper',
-            color: isOwn ? 'primary.contrastText' : 'text.primary',
-            borderRadius: 2,
-            px: 2,
-            py: 1,
-            opacity: isPending ? 0.7 : 1,
-            border: isError ? '2px solid' : '1px solid',
-            borderColor: isError ? 'error.main' : isOwn ? 'transparent' : 'divider',
+            maxWidth: '80%',
+            bgcolor: isOwn ? ownBubbleBg : otherBubbleBg,
+            color: 'text.primary',
+            borderRadius: isOwn ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
+            px: 1.75,
+            py: 1.15,
+            opacity: isPending ? 0.75 : 1,
+            border: isError ? '2px solid' : 'none',
+            borderColor: isError ? 'error.main' : 'transparent',
+            boxShadow: isOwn || isError ? 'none' : '0 2px 12px rgba(0,0,0,0.12)',
           }}
         >
-        {message.image_url && (
-          <Box
-            component="img"
-            src={message.image_url}
-            alt="Bifogad bild"
-            onClick={(e) => { e.stopPropagation(); setLightboxOpen(true); }}
-            sx={{
-              maxWidth: 240,
-              width: '100%',
-              borderRadius: 1,
-              display: 'block',
-              mb: message.content ? 1 : 0,
-              cursor: 'zoom-in',
-            }}
-          />
-        )}
-        {editing ? (
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <TextField
-              value={editValue}
-              onChange={(e) => setEditValue(e.target.value)}
-              size="small"
-              autoFocus
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleEditSave(); }
-                if (e.key === 'Escape') handleEditCancel();
+          {message.image_url && (
+            <Box
+              component="img"
+              src={message.image_url}
+              alt="Bifogad bild"
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxOpen(true);
               }}
-              sx={{ bgcolor: 'background.default', borderRadius: 1 }}
+              sx={{
+                maxWidth: 260,
+                width: '100%',
+                borderRadius: 1.5,
+                display: 'block',
+                mb: message.content ? 1 : 0,
+                cursor: 'zoom-in',
+              }}
             />
-            <IconButton size="small" onClick={handleEditSave}><Check size={16} /></IconButton>
-            <IconButton size="small" onClick={handleEditCancel}><X size={16} /></IconButton>
-          </Box>
-        ) : (
-          message.content && (
-            <Typography variant="body2">{message.content}</Typography>
-          )
-        )}
-        {isPending && <CircularProgress size={12} sx={{ ml: 1 }} />}
+          )}
+          {editing ? (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <TextField
+                value={editValue}
+                onChange={(e) => setEditValue(e.target.value)}
+                size="small"
+                autoFocus
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleEditSave();
+                  }
+                  if (e.key === 'Escape') handleEditCancel();
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    bgcolor: 'rgba(0,0,0,0.2)',
+                    borderRadius: 2,
+                  },
+                }}
+              />
+              <IconButton size="small" onClick={handleEditSave} aria-label="Spara">
+                <Check size={16} />
+              </IconButton>
+              <IconButton size="small" onClick={handleEditCancel} aria-label="Avbryt">
+                <X size={16} />
+              </IconButton>
+            </Box>
+          ) : (
+            message.content && (
+              <Typography variant="body2" sx={{ lineHeight: 1.45 }}>
+                {message.content}
+              </Typography>
+            )
+          )}
+          {isPending && <CircularProgress size={12} sx={{ ml: 1, mt: 0.5 }} />}
         </Box>
         {canOpenMenu && (
-          <Tooltip title="Redigera eller ta bort meddelandet">
+          <Tooltip title="Redigera eller ta bort">
             <IconButton
               size="small"
               aria-label="Meddelandealternativ"
               onClick={(e) => setAnchorEl(e.currentTarget)}
               sx={{
-                mt: 0.25,
-                color: isOwn ? 'primary.contrastText' : 'text.secondary',
-                opacity: isOwn ? 0.75 : 0.85,
-                '&:hover': {
-                  opacity: 1,
-                  bgcolor: isOwn ? 'rgba(18,21,26,0.12)' : 'action.hover',
-                },
+                mb: 0.25,
+                color: 'text.secondary',
+                opacity: 0.9,
+                '&:hover': { opacity: 1, bgcolor: 'action.hover' },
               }}
             >
               <MoreVertical size={18} strokeWidth={2} />
@@ -154,7 +172,10 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
           </Tooltip>
         )}
       </Box>
-      <Typography variant="caption" sx={{ color: 'text.secondary', mt: 0.5 }}>
+      <Typography
+        variant="caption"
+        sx={{ color: 'text.secondary', mt: 0.35, opacity: 0.75, fontSize: '0.68rem' }}
+      >
         {new Date(message.created_at).toLocaleTimeString('sv-SE', {
           hour: '2-digit',
           minute: '2-digit',
@@ -162,9 +183,7 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
       </Typography>
 
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        {canEdit && (
-          <MenuItem onClick={handleEditStart}>Redigera</MenuItem>
-        )}
+        {canEdit && <MenuItem onClick={handleEditStart}>Redigera</MenuItem>}
         {canDelete && (
           <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
             Ta bort

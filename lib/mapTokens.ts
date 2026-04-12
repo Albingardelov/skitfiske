@@ -1,7 +1,7 @@
-/** Leaflet kan inte läsa MUI-theme; värden speglar `lib/theme.ts`. */
+/** Synkad med temats teal-accent (kartan använder inte MUI-theme direkt). */
 export const mapTokens = {
-  accent: '#c4a667',
-  accentLight: '#d4bc85',
-  dotFill: 'rgba(196, 166, 103, 0.88)',
-  userRing: 'rgba(196, 166, 103, 0.45)',
+  accent: '#5a9e98',
+  accentLight: '#7ec4bd',
+  dotFill: 'rgba(90, 158, 152, 0.9)',
+  userRing: 'rgba(90, 158, 152, 0.35)',
 } as const;

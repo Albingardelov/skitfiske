@@ -6,7 +6,7 @@ export const stickyBarSurfaceSx: SystemStyleObject<Theme> = {
   position: 'sticky',
   top: 0,
   zIndex: 10,
-  bgcolor: 'rgba(19, 24, 32, 0.72)',
+  bgcolor: 'rgba(18, 26, 28, 0.76)',
   backdropFilter: 'blur(12px)',
   WebkitBackdropFilter: 'blur(12px)',
   borderBottom: '1px solid',

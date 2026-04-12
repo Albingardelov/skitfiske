@@ -54,11 +54,12 @@ describe('CatchCard', () => {
   it('renderar bild när image_url är satt', () => {
     const c = { ...baseCatch, image_url: 'https://example.com/fish.jpg' };
     renderWithTheme(<CatchCard catch={c} />);
-    expect(screen.getByAltText('Fångstbild')).toBeInTheDocument();
+    expect(screen.getByAltText('Fångst: Gädda')).toBeInTheDocument();
   });
 
-  it('renderar inte bild när image_url är null', () => {
+  it('visar platshållare när image_url är null', () => {
     renderWithTheme(<CatchCard catch={baseCatch} />);
-    expect(screen.queryByAltText('Fångstbild')).not.toBeInTheDocument();
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    expect(screen.getByText('Ingen bild')).toBeInTheDocument();
   });
 });
