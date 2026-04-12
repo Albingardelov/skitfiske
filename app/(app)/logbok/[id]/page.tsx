@@ -93,6 +93,11 @@ export default function FangstDetailPage() {
         <Typography variant="body1">
           {catch_.weight_kg} kg · {catch_.length_cm} cm
         </Typography>
+        {catch_.bait && (
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Bete: {catch_.bait}
+          </Typography>
+        )}
         {catch_.location_text && (
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             {catch_.location_text}

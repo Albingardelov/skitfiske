@@ -28,6 +28,7 @@ function NyFangstForm() {
   const [weightKg, setWeightKg] = useState('');
   const [lengthCm, setLengthCm] = useState('');
   const [caughtAt, setCaughtAt] = useState(getLocalDatetimeString());
+  const [bait, setBait] = useState('');
   const [locationText, setLocationText] = useState('');
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
@@ -114,6 +115,7 @@ function NyFangstForm() {
         species: species.trim(),
         weight_kg: parsedWeight,
         length_cm: parsedLength,
+        bait: bait.trim() || null,
         location_text: locationText.trim() || null,
         lat,
         lng,
@@ -174,6 +176,13 @@ function NyFangstForm() {
           value={lengthCm}
           onChange={(e) => setLengthCm(e.target.value)}
           fullWidth
+        />
+        <TextField
+          label="Bete"
+          value={bait}
+          onChange={(e) => setBait(e.target.value)}
+          fullWidth
+          placeholder="t.ex. Rapala, mask, fluga"
         />
         <TextField
           label="Datum & tid *"

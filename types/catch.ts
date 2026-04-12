@@ -12,6 +12,7 @@ export interface Catch {
   image_url: string | null;
   caught_at: string;
   created_at: string;
+  bait: string | null;
 }
 
 export interface InsertCatch {
@@ -25,4 +26,5 @@ export interface InsertCatch {
   lng: number | null;
   image_url: string | null;
   caught_at: string;
+  bait: string | null;
 }
