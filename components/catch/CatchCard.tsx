@@ -32,6 +32,8 @@ function LogbookCatchCard({ c }: { c: Catch }) {
   const isLight = theme.palette.mode === 'light';
   const forest = isLight ? expedition.forest : theme.palette.primary.dark;
   const rust = isLight ? expedition.rust : theme.palette.secondary.main;
+  const muted = isLight ? alpha(theme.palette.text.primary, 0.78) : theme.palette.text.secondary;
+  const mutedSoft = isLight ? alpha(theme.palette.text.primary, 0.68) : theme.palette.text.secondary;
   const latin = scientificNameForSpecies(c.species);
   const weatherLine = weatherSummarySv({ sea: c.sea_surface_temp_c, air: c.air_temp_c });
 
@@ -46,7 +48,15 @@ function LogbookCatchCard({ c }: { c: Catch }) {
         boxShadow: isLight ? '0 4px 20px rgba(27, 48, 34, 0.07)' : '0 4px 20px rgba(0,0,0,0.25)',
       }}
     >
-      <CardActionArea component={NextLink} href={`/logbok/${c.id}`}>
+      <CardActionArea
+        component={NextLink}
+        href={`/logbok/${c.id}`}
+        sx={{
+          color: 'inherit',
+          textDecoration: 'none',
+        }}
+      >
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
         <Box sx={{ position: 'relative' }}>
           {c.image_url ? (
             <Box
@@ -71,7 +81,7 @@ function LogbookCatchCard({ c }: { c: Catch }) {
                 justifyContent: 'center',
               }}
             >
-              <Typography variant="caption" sx={{ fontWeight: 600, color: 'text.secondary' }}>
+              <Typography variant="caption" sx={{ fontWeight: 600, color: mutedSoft }}>
                 Ingen bild
               </Typography>
             </Box>
@@ -131,7 +141,7 @@ function LogbookCatchCard({ c }: { c: Catch }) {
                   fontSize: '0.65rem',
                   fontWeight: 600,
                   letterSpacing: '0.06em',
-                  color: 'text.secondary',
+                  color: muted,
                   lineHeight: 1.3,
                 }}
               >
@@ -143,7 +153,7 @@ function LogbookCatchCard({ c }: { c: Catch }) {
                     fontFamily: 'var(--font-newsreader), Georgia, serif',
                     fontSize: '0.72rem',
                     fontStyle: 'italic',
-                    color: 'text.secondary',
+                    color: mutedSoft,
                     mt: 0.25,
                     lineHeight: 1.3,
                   }}
@@ -157,7 +167,7 @@ function LogbookCatchCard({ c }: { c: Catch }) {
             sx={{
               fontFamily: 'var(--font-work), var(--font-sans), system-ui, sans-serif',
               fontSize: '0.78rem',
-              color: 'text.secondary',
+              color: muted,
               mb: c.location_text ? 0.75 : 0,
               fontFeatureSettings: '"tnum"',
             }}
@@ -184,7 +194,7 @@ function LogbookCatchCard({ c }: { c: Catch }) {
               sx={{
                 fontFamily: 'var(--font-work), var(--font-sans), system-ui, sans-serif',
                 fontSize: '0.72rem',
-                color: 'text.secondary',
+                color: mutedSoft,
                 mt: c.location_text ? 0.5 : 0,
                 fontFeatureSettings: '"tnum"',
               }}
@@ -193,6 +203,7 @@ function LogbookCatchCard({ c }: { c: Catch }) {
             </Typography>
           )}
         </CardContent>
+        </Box>
       </CardActionArea>
     </Card>
   );
@@ -225,7 +236,12 @@ export default function CatchCard({ catch: c, variant = 'default' }: Props) {
         color: light ? hemTheme.ink : 'inherit',
       }}
     >
-      <CardActionArea component={NextLink} href={`/logbok/${c.id}`}>
+      <CardActionArea
+        component={NextLink}
+        href={`/logbok/${c.id}`}
+        sx={{ color: 'inherit', textDecoration: 'none' }}
+      >
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
         {c.image_url ? (
           <Box
             component="img"
@@ -304,6 +320,7 @@ export default function CatchCard({ catch: c, variant = 'default' }: Props) {
             {date}
           </Typography>
         </CardContent>
+        </Box>
       </CardActionArea>
     </Card>
   );
