@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
@@ -15,6 +16,7 @@ import { createClient } from '@/lib/supabase/client';
 import ColorModeMenuButton from '@/components/theme/ColorModeMenuButton';
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -39,7 +41,7 @@ export default function RegisterPage() {
 
     setLoading(true);
     const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -51,6 +53,12 @@ export default function RegisterPage() {
 
     if (error) {
       setError('Något gick fel. Försök igen.');
+      return;
+    }
+
+    if (data.session) {
+      router.push('/hem');
+      router.refresh();
       return;
     }
 
@@ -70,7 +78,7 @@ export default function RegisterPage() {
         }}
       >
         <Alert severity="success" sx={{ maxWidth: 420, width: '100%', borderRadius: 3 }}>
-          Konto skapat! Kontrollera din e-post för en bekräftelselänk.
+          Konto skapat! Om du måste bekräfta e-posten först har vi skickat ett meddelande till din inkorg.
         </Alert>
       </Box>
     );

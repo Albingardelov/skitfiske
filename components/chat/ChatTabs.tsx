@@ -19,8 +19,9 @@ export default function ChatTabs({ channels, activeChannelId, onChannelChange }:
       sx={[
         staticBarSurfaceSx,
         {
+          flexShrink: 0,
           px: 2,
-          py: 1.25,
+          py: 1,
           display: 'flex',
           gap: 1,
           flexWrap: 'nowrap',

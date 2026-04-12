@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
@@ -9,7 +9,7 @@ import { useClub } from '@/contexts/ClubContext';
 import { fetchChannelsForClub } from '@/lib/supabase/chat';
 import { useChat } from '@/hooks/useChat';
 import EditorialShellHeader from '@/components/layout/EditorialShellHeader';
-import ClubChannelsSection from '@/components/chat/ClubChannelsSection';
+import ChatTabs from '@/components/chat/ChatTabs';
 import MessageList from '@/components/chat/MessageList';
 import MessageInput from '@/components/chat/MessageInput';
 import { expedition } from '@/lib/theme/expeditionTokens';
@@ -34,13 +34,6 @@ function ChattThread({
     fullName,
   );
 
-  const messagePreview = useMemo(() => {
-    const withText = [...messages].reverse().find((m) => m.content?.trim());
-    if (!withText?.content) return null;
-    const t = withText.content.trim();
-    return t.length > 80 ? `${t.slice(0, 77)}…` : t;
-  }, [messages]);
-
   return (
     <Box
       sx={(theme) => ({
@@ -53,14 +46,13 @@ function ChattThread({
       })}
     >
       <EditorialShellHeader />
-      <ClubChannelsSection
+      <ChatTabs
         channels={channels}
         activeChannelId={activeChannelId}
         onChannelChange={onChannelChange}
-        messagePreview={messagePreview}
       />
       {error && (
-        <Alert severity="error" sx={{ mx: 2, mt: 0.5, borderRadius: 3 }}>
+        <Alert severity="error" sx={{ mx: 2, mt: 0.5, flexShrink: 0, borderRadius: 3 }}>
           {error}
         </Alert>
       )}
