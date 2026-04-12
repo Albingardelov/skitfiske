@@ -1,6 +1,9 @@
+'use client';
+
 // components/chat/ChatTabs.tsx
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import { alpha } from '@mui/material/styles';
 import { stickyBarSurfaceSx } from '@/lib/appChrome';
 import type { Channel } from '@/types/chat';
 
@@ -35,7 +38,7 @@ export default function ChatTabs({ channels, activeChannelId, onChannelChange }:
             onClick={() => onChannelChange(channel.id)}
             variant="text"
             size="small"
-            sx={{
+            sx={(theme) => ({
               flexShrink: 0,
               borderRadius: 999,
               px: 2,
@@ -45,15 +48,17 @@ export default function ChatTabs({ channels, activeChannelId, onChannelChange }:
               fontWeight: 600,
               fontSize: '0.8125rem',
               letterSpacing: '0.02em',
-              color: active ? 'primary.light' : 'text.secondary',
-              bgcolor: active ? 'action.selected' : 'rgba(255,255,255,0.04)',
+              color: active ? 'primary.main' : 'text.secondary',
+              bgcolor: active
+                ? 'action.selected'
+                : alpha(theme.palette.text.primary, theme.palette.mode === 'dark' ? 0.04 : 0.06),
               border: '1px solid',
-              borderColor: active ? 'rgba(90, 158, 152, 0.45)' : 'transparent',
+              borderColor: active ? alpha(theme.palette.primary.main, 0.45) : 'transparent',
               '&:hover': {
                 bgcolor: active ? 'action.selected' : 'action.hover',
-                borderColor: active ? 'rgba(90, 158, 152, 0.55)' : 'divider',
+                borderColor: active ? alpha(theme.palette.primary.main, 0.55) : 'divider',
               },
-            }}
+            })}
           >
             {channel.label}
           </Button>

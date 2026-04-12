@@ -4,26 +4,39 @@ import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
+import { alpha, useTheme } from '@mui/material/styles';
 import { createClient } from '@/lib/supabase/client';
 import { fetchMyCatches, fetchAllCatches } from '@/lib/supabase/catches';
+import HemHero from '@/components/home/HemHero';
 import StatsRow from '@/components/home/StatsRow';
 import CatchCard from '@/components/catch/CatchCard';
+import { hemTheme } from '@/lib/hemTheme';
 import type { Catch } from '@/types/catch';
 
 function HemSkeleton() {
+  const theme = useTheme();
+  const skelBg = alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.12 : 0.08);
+  const skelBg2 = alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.1 : 0.06);
+
   return (
-    <Box sx={{ px: 2, pt: 3, pb: 2 }}>
-      <Skeleton variant="text" width="55%" height={44} sx={{ mb: 1, borderRadius: 1 }} />
-      <Skeleton variant="text" width="85%" height={22} sx={{ mb: 3, borderRadius: 1 }} />
-      <Skeleton variant="rounded" height={100} sx={{ mb: 2, borderRadius: 3 }} />
-      <Skeleton variant="text" width={140} height={24} sx={{ mb: 1.5 }} />
-      <Skeleton variant="rounded" height={200} sx={{ mb: 2, borderRadius: 3, mx: 0 }} />
-      <Skeleton variant="rounded" height={200} sx={{ borderRadius: 3, mx: 0 }} />
+    <Box sx={{ bgcolor: 'background.default', flex: 1, minHeight: 0 }}>
+      <Box sx={{ px: 2, pt: 2 }}>
+        <Skeleton variant="rounded" height={320} sx={{ borderRadius: '24px', bgcolor: skelBg }} />
+      </Box>
+      <Box sx={{ px: 2, pt: 3 }}>
+        <Skeleton variant="rounded" height={96} sx={{ borderRadius: '18px', bgcolor: skelBg2 }} />
+      </Box>
+      <Box sx={{ px: 2, pt: 2 }}>
+        <Skeleton variant="text" width="40%" sx={{ bgcolor: skelBg }} />
+        <Skeleton variant="rounded" height={220} sx={{ mt: 1, borderRadius: '18px', bgcolor: skelBg2 }} />
+      </Box>
     </Box>
   );
 }
 
 export default function HemPage() {
+  const theme = useTheme();
+  const isLight = theme.palette.mode === 'light';
   const [firstName, setFirstName] = useState<string>('');
   const [myCatches, setMyCatches] = useState<Catch[]>([]);
   const [clubFeed, setClubFeed] = useState<Catch[]>([]);
@@ -61,44 +74,51 @@ export default function HemPage() {
     myCatches.length > 0 ? Math.max(...myCatches.map((c) => c.length_cm)) : null;
 
   if (isLoading) {
-    return (
-      <Box sx={{ minHeight: 'calc(100dvh - 56px)' }}>
-        <HemSkeleton />
-      </Box>
-    );
+    return <HemSkeleton />;
   }
 
   return (
-    <Box sx={{ pb: 4 }}>
-      <Box sx={{ px: 2, pt: 3, pb: 2 }}>
-        <Typography
-          variant="h4"
+    <Box
+      sx={{
+        bgcolor: 'background.default',
+        color: 'text.primary',
+        flex: 1,
+        minHeight: 0,
+        pb: 4,
+      }}
+    >
+      <HemHero firstName={firstName} />
+
+      <StatsRow
+        count={myCatches.length}
+        heaviestKg={heaviestKg}
+        longestCm={longestCm}
+        variant={isLight ? 'light' : 'default'}
+      />
+
+      <Box sx={{ px: 2, mb: 1.5, mt: 1 }}>
+        <Box
           sx={{
-            fontWeight: 600,
-            letterSpacing: '-0.03em',
-            lineHeight: 1.2,
+            width: 28,
+            height: 3,
+            borderRadius: 1,
+            bgcolor: isLight ? hemTheme.rust : 'secondary.main',
+            mb: 1.25,
           }}
-        >
-          {firstName ? `Hej, ${firstName}` : 'Välkommen'}
-        </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.75 }}>
-          Klubbens senaste fångster och dina siffror.
-        </Typography>
-      </Box>
-
-      <StatsRow count={myCatches.length} heaviestKg={heaviestKg} longestCm={longestCm} />
-
-      <Box sx={{ px: 2, mb: 1.5, mt: 0.5 }}>
+        />
         <Typography
-          variant="overline"
           sx={{
-            color: 'text.secondary',
-            fontWeight: 600,
-            letterSpacing: '0.12em',
-            lineHeight: 1.5,
+            fontFamily: 'var(--font-display-editorial), Georgia, serif',
+            fontWeight: 700,
+            fontSize: '1.35rem',
+            letterSpacing: '-0.02em',
+            color: 'text.primary',
           }}
         >
           Senaste i klubben
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
+          Rapporter från medlemmarna
         </Typography>
       </Box>
 
@@ -109,7 +129,9 @@ export default function HemPage() {
           </Typography>
         </Box>
       ) : (
-        clubFeed.map((c) => <CatchCard key={c.id} catch={c} />)
+        clubFeed.map((c) => (
+          <CatchCard key={c.id} catch={c} variant={isLight ? 'light' : 'default'} />
+        ))
       )}
     </Box>
   );

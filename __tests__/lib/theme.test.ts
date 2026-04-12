@@ -1,28 +1,37 @@
+import type { Theme } from '@mui/material/styles';
+import { createAppTheme } from '@/lib/theme/createAppTheme';
 import theme from '@/lib/theme';
 
 describe('MUI theme', () => {
-  it('has teal primary UI accent', () => {
-    expect(theme.palette.primary.main).toBe('#5a9e98');
+  it('default export är mörkt läge', () => {
+    expect(theme.palette.mode).toBe('dark');
+    expect(theme.palette.primary.main).toBe('#a9d0af');
   });
 
-  it('has deep surface secondary', () => {
-    expect(theme.palette.secondary.main).toBe('#152022');
+  it('mörkt läge har journal-ytor och sage primary', () => {
+    const dark = createAppTheme('dark');
+    expect(dark.palette.background.default).toBe('#121414');
+    expect(dark.palette.secondary.main).toBe('#e8a066');
+    expect(dark.palette.text.primary).toBe('#e8e7e7');
   });
 
-  it('has cool charcoal background default', () => {
-    expect(theme.palette.background.default).toBe('#0a0f11');
+  it('ljust läge har fine paper och skogsgrön primary', () => {
+    const light = createAppTheme('light');
+    expect(light.palette.mode).toBe('light');
+    expect(light.palette.background.default).toBe('#fcf9f8');
+    expect(light.palette.primary.main).toBe('#18301d');
+    expect(light.palette.secondary.main).toBe('#9f4215');
   });
 
-  it('has soft off-white primary text', () => {
-    expect(theme.palette.text.primary).toBe('#e8eaec');
-  });
-
-  it('has larger base border radius', () => {
+  it('har större bas-border-radius', () => {
     expect(theme.shape.borderRadius).toBe(12);
   });
 
-  it('Button has comfortable minHeight', () => {
-    const buttonRoot = theme.components?.MuiButton?.styleOverrides?.root as Record<string, unknown>;
-    expect(buttonRoot.minHeight).toBe(48);
+  it('Button har bekväm minHeight', () => {
+    const buttonRoot = theme.components?.MuiButton?.styleOverrides?.root as (a: {
+      theme: Theme;
+    }) => Record<string, unknown>;
+    const styles = buttonRoot({ theme });
+    expect(styles.minHeight).toBe(48);
   });
 });

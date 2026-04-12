@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import InputBase from '@mui/material/InputBase';
+import { alpha } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
 import { Camera, Send } from 'lucide-react';
@@ -53,24 +54,27 @@ export default function MessageInput({ onSend, disabled }: Props) {
           pb: 'calc(12px + env(safe-area-inset-bottom, 0px))',
           borderTop: '1px solid',
           borderColor: 'divider',
-          bgcolor: 'rgba(18, 26, 28, 0.94)',
+          bgcolor: 'var(--app-nav-bg)',
           backdropFilter: 'blur(14px)',
           WebkitBackdropFilter: 'blur(14px)',
         }}
       >
         <Box
-          sx={{
+          sx={(theme) => ({
             display: 'flex',
             alignItems: 'flex-end',
             gap: 1,
             p: 1,
             borderRadius: 3,
-            bgcolor: 'rgba(255,255,255,0.06)',
+            bgcolor:
+              theme.palette.mode === 'dark'
+                ? alpha(theme.palette.common.white, 0.06)
+                : alpha(theme.palette.common.black, 0.04),
             border: '1px solid',
             borderColor: 'divider',
             maxWidth: 720,
             mx: 'auto',
-          }}
+          })}
         >
           <input
             ref={fileInputRef}

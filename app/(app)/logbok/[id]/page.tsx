@@ -30,7 +30,9 @@ export default function FangstDetailPage() {
 
   if (isLoading) {
     return (
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100dvh - 56px)' }}>
+      <Box
+        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, minHeight: 0 }}
+      >
         <CircularProgress />
       </Box>
     );

@@ -4,13 +4,17 @@ import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import NextLink from 'next/link';
+import { hemTheme } from '@/lib/hemTheme';
 import type { Catch } from '@/types/catch';
 
 interface Props {
   catch: Catch;
+  variant?: 'default' | 'light';
 }
 
-export default function CatchCard({ catch: c }: Props) {
+export default function CatchCard({ catch: c, variant = 'default' }: Props) {
+  const light = variant === 'light';
+
   const date = new Date(c.caught_at).toLocaleString('sv-SE', {
     day: 'numeric',
     month: 'short',
@@ -20,7 +24,17 @@ export default function CatchCard({ catch: c }: Props) {
   });
 
   return (
-    <Card sx={{ mb: 2, mx: 2, bgcolor: 'background.paper', overflow: 'hidden' }}>
+    <Card
+      sx={{
+        mb: 2,
+        mx: 2,
+        bgcolor: light ? '#fff' : 'background.paper',
+        overflow: 'hidden',
+        borderRadius: light ? '18px' : undefined,
+        boxShadow: light ? '0 4px 24px rgba(27, 48, 34, 0.08)' : undefined,
+        color: light ? hemTheme.ink : 'inherit',
+      }}
+    >
       <CardActionArea component={NextLink} href={`/logbok/${c.id}`}>
         {c.image_url ? (
           <Box
@@ -39,15 +53,21 @@ export default function CatchCard({ catch: c }: Props) {
             sx={{
               width: '100%',
               aspectRatio: '16 / 9',
-              bgcolor: 'rgba(255,255,255,0.04)',
+              bgcolor: light ? '#E8E4DC' : 'rgba(255,255,255,0.04)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              borderBottom: '1px solid',
+              borderBottom: light ? 'none' : '1px solid',
               borderColor: 'divider',
             }}
           >
-            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>
+            <Typography
+              variant="caption"
+              sx={{
+                fontWeight: 600,
+                color: light ? hemTheme.muted : 'text.secondary',
+              }}
+            >
               Ingen bild
             </Typography>
           </Box>
@@ -56,11 +76,14 @@ export default function CatchCard({ catch: c }: Props) {
           <Typography
             variant="h6"
             sx={{
-              fontFamily: 'var(--font-serif), Georgia, serif',
-              fontWeight: 600,
+              fontFamily: light
+                ? 'var(--font-display-editorial), Georgia, serif'
+                : 'var(--font-serif), Georgia, serif',
+              fontWeight: 700,
               letterSpacing: '-0.02em',
               lineHeight: 1.25,
               mb: 0.75,
+              color: light ? hemTheme.ink : 'inherit',
             }}
           >
             {c.species}
@@ -68,7 +91,7 @@ export default function CatchCard({ catch: c }: Props) {
           <Typography
             variant="body2"
             sx={{
-              color: 'text.secondary',
+              color: light ? hemTheme.muted : 'text.secondary',
               fontFeatureSettings: '"tnum"',
               fontWeight: 500,
               mb: 0.5,
@@ -77,11 +100,17 @@ export default function CatchCard({ catch: c }: Props) {
             {c.weight_kg} kg · {c.length_cm} cm
           </Typography>
           {c.location_text && (
-            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 0.5 }}>
+            <Typography variant="body2" sx={{ color: light ? hemTheme.muted : 'text.secondary', mb: 0.5 }}>
               {c.location_text}
             </Typography>
           )}
-          <Typography variant="caption" sx={{ color: 'text.secondary', opacity: 0.85 }}>
+          <Typography
+            variant="caption"
+            sx={{
+              color: light ? hemTheme.muted : 'text.secondary',
+              opacity: light ? 1 : 0.85,
+            }}
+          >
             {date}
           </Typography>
         </CardContent>

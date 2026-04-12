@@ -10,7 +10,9 @@ import Alert from '@mui/material/Alert';
 import Link from '@mui/material/Link';
 import NextLink from 'next/link';
 import Image from 'next/image';
+import { alpha } from '@mui/material/styles';
 import { createClient } from '@/lib/supabase/client';
+import ColorModeMenuButton from '@/components/theme/ColorModeMenuButton';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -71,11 +73,11 @@ export default function ForgotPasswordPage() {
       }}
     >
       <Image
-        src="/logo.svg"
+        src="/logo.png"
         alt="Skitfiske"
-        width={168}
-        height={68}
-        style={{ marginBottom: 12 }}
+        width={160}
+        height={160}
+        style={{ marginBottom: 12, width: 140, height: 'auto' }}
       />
       <Typography variant="h4" sx={{ mb: 1, textAlign: 'center', letterSpacing: '-0.03em' }}>
         Glömt lösenord?
@@ -96,7 +98,7 @@ export default function ForgotPasswordPage() {
           borderRadius: 4,
           border: '1px solid',
           borderColor: 'divider',
-          bgcolor: 'rgba(18, 26, 28, 0.65)',
+          bgcolor: (t) => alpha(t.palette.background.paper, t.palette.mode === 'light' ? 0.88 : 0.65),
           backdropFilter: 'blur(12px)',
         }}
       >
@@ -128,6 +130,10 @@ export default function ForgotPasswordPage() {
           </Link>
         </Box>
       </Paper>
+
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+        <ColorModeMenuButton aria-label="Välj ljust eller mörkt läge" sx={{ ml: 0 }} />
+      </Box>
     </Box>
   );
 }

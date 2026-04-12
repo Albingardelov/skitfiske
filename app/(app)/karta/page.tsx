@@ -62,7 +62,7 @@ function KartaContent() {
   }
 
   return (
-    <Box sx={{ height: 'calc(100dvh - 56px)', position: 'relative' }}>
+    <Box sx={{ flex: 1, minHeight: 0, position: 'relative', height: '100%' }}>
       {/* Filter toggle */}
       <ToggleButtonGroup
         value={filter}

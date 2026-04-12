@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { IBM_Plex_Sans, IBM_Plex_Serif } from 'next/font/google';
+import { IBM_Plex_Sans, IBM_Plex_Serif, Playfair_Display } from 'next/font/google';
 import ThemeRegistry from '@/components/ThemeRegistry';
 import './globals.css';
 
@@ -14,6 +14,13 @@ const plexSerif = IBM_Plex_Serif({
   subsets: ['latin'],
   weight: ['400', '600', '700'],
   variable: '--font-serif',
+  display: 'swap',
+});
+
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['600', '700'],
+  variable: '--font-display-editorial',
   display: 'swap',
 });
 
@@ -36,7 +43,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="sv" className={`${plexSans.variable} ${plexSerif.variable}`}>
+    <html
+      lang="sv"
+      className={`${plexSans.variable} ${plexSerif.variable} ${playfairDisplay.variable}`}
+    >
       <body className={plexSans.className}>
         <ThemeRegistry>{children}</ThemeRegistry>
       </body>

@@ -3,10 +3,8 @@
 import createCache from '@emotion/cache';
 import { useServerInsertedHTML } from 'next/navigation';
 import { CacheProvider } from '@emotion/react';
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import { useState } from 'react';
-import theme from '@/lib/theme';
+import { ColorModeProvider } from '@/contexts/ColorModeContext';
 
 export default function ThemeRegistry({ children }: { children: React.ReactNode }) {
   const [{ cache, flush }] = useState(() => {
@@ -47,10 +45,7 @@ export default function ThemeRegistry({ children }: { children: React.ReactNode 
 
   return (
     <CacheProvider value={cache}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        {children}
-      </ThemeProvider>
+      <ColorModeProvider>{children}</ColorModeProvider>
     </CacheProvider>
   );
 }

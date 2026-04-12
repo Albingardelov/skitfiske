@@ -6,14 +6,13 @@ import { useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Fab from '@mui/material/Fab';
+import { alpha } from '@mui/material/styles';
 import { Plus } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { fetchMyCatches, fetchAllCatches } from '@/lib/supabase/catches';
 import CatchList from '@/components/catch/CatchList';
 import { stickyBarSurfaceSx } from '@/lib/appChrome';
 import type { Catch } from '@/types/catch';
-
-const mainH = 'calc(100dvh - 56px)';
 
 export default function LogbokPage() {
   const router = useRouter();
@@ -40,7 +39,7 @@ export default function LogbokPage() {
   }, [tab, userId]);
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: mainH }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
       <Box
         sx={[
           stickyBarSurfaceSx,
@@ -60,7 +59,7 @@ export default function LogbokPage() {
               onClick={() => setTab(index)}
               variant="text"
               size="small"
-              sx={{
+              sx={(theme) => ({
                 flex: 1,
                 borderRadius: 999,
                 py: 1,
@@ -68,15 +67,17 @@ export default function LogbokPage() {
                 textTransform: 'none',
                 fontWeight: 600,
                 fontSize: '0.8125rem',
-                color: active ? 'primary.light' : 'text.secondary',
-                bgcolor: active ? 'action.selected' : 'rgba(255,255,255,0.04)',
+                color: active ? 'primary.main' : 'text.secondary',
+                bgcolor: active
+                  ? 'action.selected'
+                  : alpha(theme.palette.text.primary, theme.palette.mode === 'dark' ? 0.04 : 0.06),
                 border: '1px solid',
-                borderColor: active ? 'rgba(90, 158, 152, 0.45)' : 'transparent',
+                borderColor: active ? alpha(theme.palette.primary.main, 0.45) : 'transparent',
                 '&:hover': {
                   bgcolor: active ? 'action.selected' : 'action.hover',
-                  borderColor: active ? 'rgba(90, 158, 152, 0.55)' : 'divider',
+                  borderColor: active ? alpha(theme.palette.primary.main, 0.55) : 'divider',
                 },
-              }}
+              })}
             >
               {label}
             </Button>

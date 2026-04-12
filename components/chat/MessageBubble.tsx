@@ -1,3 +1,5 @@
+'use client';
+
 // components/chat/MessageBubble.tsx
 import { useState } from 'react';
 import Box from '@mui/material/Box';
@@ -9,11 +11,9 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 import Tooltip from '@mui/material/Tooltip';
+import { alpha, useTheme } from '@mui/material/styles';
 import { Check, MoreVertical, X } from 'lucide-react';
 import type { Message } from '@/types/chat';
-
-const ownBubbleBg = 'rgba(90, 158, 152, 0.28)';
-const otherBubbleBg = 'rgba(255, 255, 255, 0.055)';
 
 interface Props {
   message: Message;
@@ -23,6 +23,12 @@ interface Props {
 }
 
 export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Props) {
+  const theme = useTheme();
+  const ownBubbleBg = alpha(theme.palette.primary.main, 0.28);
+  const otherBubbleBg =
+    theme.palette.mode === 'dark'
+      ? alpha(theme.palette.common.white, 0.055)
+      : alpha(theme.palette.common.black, 0.06);
   const isPending = message.status === 'pending';
   const isError = message.status === 'error';
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

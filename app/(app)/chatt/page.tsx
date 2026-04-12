@@ -11,8 +11,6 @@ import MessageList from '@/components/chat/MessageList';
 import MessageInput from '@/components/chat/MessageInput';
 import type { Channel } from '@/types/chat';
 
-const mainH = 'calc(100dvh - 56px)';
-
 export default function ChattPage() {
   const [channels, setChannels] = useState<Channel[]>([]);
   const [activeChannelId, setActiveChannelId] = useState('');
@@ -53,7 +51,8 @@ export default function ChattPage() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          height: mainH,
+          flex: 1,
+          minHeight: 0,
           px: 2,
         }}
       >
@@ -71,7 +70,8 @@ export default function ChattPage() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          height: mainH,
+          flex: 1,
+          minHeight: 0,
         }}
       >
         <CircularProgress sx={{ color: 'primary.light' }} />
@@ -80,7 +80,7 @@ export default function ChattPage() {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: mainH }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
       <ChatTabs
         channels={channels}
         activeChannelId={activeChannelId}

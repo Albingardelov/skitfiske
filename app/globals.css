@@ -1,3 +1,50 @@
+/*
+ * Design tokens som CSS-variabler — speglar assets/LightMode.md & DarkMode.md.
+ * <html data-color-scheme="light|dark"> sätts av ColorModeProvider.
+ * Använd var(--app-*) i rå CSS; MUI styrs via createAppTheme (samma värden i lib/theme/palettes.ts).
+ */
+:root {
+  color-scheme: dark;
+}
+
+:root[data-color-scheme='light'] {
+  color-scheme: light;
+
+  --app-surface: #fcf9f8;
+  --app-surface-low: #f6f3f2;
+  --app-surface-high: #ffffff;
+  --app-primary: #18301d;
+  --app-primary-container: #2e4632;
+  --app-on-primary: #fcf9f8;
+  --app-secondary: #9f4215;
+  --app-on-surface: #1b1c1c;
+  --app-on-surface-muted: rgba(27, 28, 28, 0.62);
+  --app-outline: rgba(195, 200, 192, 0.22);
+  --app-chrome-bg: rgba(255, 255, 255, 0.82);
+  --app-chrome-border: rgba(24, 48, 29, 0.1);
+  --app-nav-bg: rgba(255, 255, 255, 0.92);
+  --app-nav-shadow: rgba(27, 28, 28, 0.12);
+}
+
+:root[data-color-scheme='dark'] {
+  color-scheme: dark;
+
+  --app-surface: #121414;
+  --app-surface-low: #1a1c1c;
+  --app-surface-high: #1f2020;
+  --app-primary: #a9d0af;
+  --app-primary-container: #26482f;
+  --app-on-primary: #121414;
+  --app-secondary: #e8a066;
+  --app-on-surface: #e8e7e7;
+  --app-on-surface-muted: rgba(232, 231, 231, 0.62);
+  --app-outline: rgba(232, 231, 231, 0.1);
+  --app-chrome-bg: rgba(31, 32, 32, 0.82);
+  --app-chrome-border: rgba(255, 255, 255, 0.08);
+  --app-nav-bg: rgba(31, 32, 32, 0.92);
+  --app-nav-shadow: rgba(0, 0, 0, 0.35);
+}
+
 /* Global styles hanteras av MUI CssBaseline */
 
 /* Leaflet — ljus OSM-bas; kontroller/popup följer standardkänsla */

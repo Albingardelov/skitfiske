@@ -28,12 +28,12 @@ export default function BottomNav() {
         px: 1.5,
         pt: 1,
         pb: 'calc(10px + env(safe-area-inset-bottom, 0px))',
-        bgcolor: 'rgba(18, 26, 28, 0.92)',
+        bgcolor: 'var(--app-nav-bg)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
         borderTop: '1px solid',
-        borderColor: 'divider',
-        boxShadow: '0 -8px 32px rgba(0,0,0,0.35)',
+        borderColor: 'var(--app-chrome-border)',
+        boxShadow: '0 -8px 32px var(--app-nav-shadow)',
       }}
     >
       <Box
