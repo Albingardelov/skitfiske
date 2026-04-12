@@ -16,7 +16,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           borderColor: 'divider',
         }}
       >
-        <Image src="/logo.svg" alt="Skitfiske" width={120} height={36} />
+        <Image src="/logo.svg" alt="Skitfiske" width={48} height={48} />
       </Box>
       {children}
       <BottomNav />
