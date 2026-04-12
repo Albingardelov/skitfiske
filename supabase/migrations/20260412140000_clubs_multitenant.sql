@@ -77,10 +77,11 @@ begin
   insert into public.club_members (club_id, user_id, role)
   values (v_club.id, auth.uid(), 'admin');
 
+  -- Unikt `name` per rad (många scheman har UNIQUE på name globalt — undvik kollision mellan klubbar).
   insert into public.channels (club_id, name, label)
   values
-    (v_club.id, 'allmant', 'Allmänt'),
-    (v_club.id, 'rapporter', 'Rapporter');
+    (v_club.id, v_club.id::text || ':allmant', 'Allmänt'),
+    (v_club.id, v_club.id::text || ':rapporter', 'Rapporter');
 
   return v_club;
 end;
