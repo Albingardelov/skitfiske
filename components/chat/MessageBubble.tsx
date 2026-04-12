@@ -7,6 +7,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
+import Modal from '@mui/material/Modal';
 import { Check, X } from 'lucide-react';
 import type { Message } from '@/types/chat';
 
@@ -23,6 +24,7 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [editing, setEditing] = useState(false);
   const [editValue, setEditValue] = useState(message.content ?? '');
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   function handleBubbleClick(e: React.MouseEvent<HTMLElement>) {
     if (!isOwn || isPending || isError || !message.content) return;
@@ -89,12 +91,14 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
             component="img"
             src={message.image_url}
             alt="Bifogad bild"
+            onClick={(e) => { e.stopPropagation(); setLightboxOpen(true); }}
             sx={{
               maxWidth: 240,
               width: '100%',
               borderRadius: 1,
               display: 'block',
               mb: message.content ? 1 : 0,
+              cursor: 'zoom-in',
             }}
           />
         )}
@@ -132,6 +136,29 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
         <MenuItem onClick={handleEditStart}>Redigera</MenuItem>
         <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>Ta bort</MenuItem>
       </Menu>
+
+      {message.image_url && (
+        <Modal open={lightboxOpen} onClose={() => setLightboxOpen(false)}>
+          <Box
+            onClick={() => setLightboxOpen(false)}
+            sx={{
+              position: 'fixed',
+              inset: 0,
+              bgcolor: 'rgba(0,0,0,0.9)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Box
+              component="img"
+              src={message.image_url}
+              alt="Fullscreen"
+              sx={{ maxWidth: '95vw', maxHeight: '90vh', objectFit: 'contain', borderRadius: 1 }}
+            />
+          </Box>
+        </Modal>
+      )}
     </Box>
   );
 }
