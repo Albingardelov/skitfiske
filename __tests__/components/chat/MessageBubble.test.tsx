@@ -20,14 +20,14 @@ function renderWithTheme(ui: React.ReactElement) {
 }
 
 describe('MessageBubble', () => {
-  it('visar avsändarnamn för andras meddelanden', () => {
+  it('visar avsändarförnamn i tidsrad för andras meddelanden', () => {
     renderWithTheme(<MessageBubble message={baseMessage} isOwn={false} />);
-    expect(screen.getByText('Erik Johansson')).toBeInTheDocument();
+    expect(screen.getByText(/· Erik/)).toBeInTheDocument();
   });
 
   it('visar inte avsändarnamn för egna meddelanden', () => {
     renderWithTheme(<MessageBubble message={baseMessage} isOwn={true} />);
-    expect(screen.queryByText('Erik Johansson')).not.toBeInTheDocument();
+    expect(screen.queryByText(/· Erik/)).not.toBeInTheDocument();
   });
 
   it('renderar meddelandetext', () => {

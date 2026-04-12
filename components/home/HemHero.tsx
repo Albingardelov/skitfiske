@@ -70,7 +70,7 @@ export default function HemHero({ firstName }: Props) {
         <Typography
           component="h1"
           sx={{
-            fontFamily: 'var(--font-display-editorial), Georgia, serif',
+            fontFamily: 'var(--font-newsreader), Georgia, serif',
             fontWeight: 700,
             fontSize: { xs: '1.85rem', sm: '2.15rem' },
             lineHeight: 1.15,
@@ -84,6 +84,7 @@ export default function HemHero({ firstName }: Props) {
         </Typography>
         <Typography
           sx={{
+            fontFamily: 'var(--font-work), var(--font-sans), system-ui, sans-serif',
             fontSize: '0.9375rem',
             lineHeight: 1.5,
             color: 'rgba(255,255,255,0.92)',
@@ -105,6 +106,7 @@ export default function HemHero({ firstName }: Props) {
             px: 2.5,
             py: 1.25,
             textTransform: 'none',
+            fontFamily: 'var(--font-work), var(--font-sans), system-ui, sans-serif',
             fontWeight: 600,
             fontSize: '0.9375rem',
             bgcolor: hemTheme.forest,

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { IBM_Plex_Sans, IBM_Plex_Serif, Playfair_Display } from 'next/font/google';
+import { IBM_Plex_Sans, IBM_Plex_Serif, Newsreader, Playfair_Display, Work_Sans } from 'next/font/google';
 import ThemeRegistry from '@/components/ThemeRegistry';
 import './globals.css';
 
@@ -24,6 +24,20 @@ const playfairDisplay = Playfair_Display({
   display: 'swap',
 });
 
+const newsreader = Newsreader({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-newsreader',
+  display: 'swap',
+});
+
+const workSans = Work_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-work',
+  display: 'swap',
+});
+
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
@@ -45,7 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="sv"
-      className={`${plexSans.variable} ${plexSerif.variable} ${playfairDisplay.variable}`}
+      className={`${plexSans.variable} ${plexSerif.variable} ${playfairDisplay.variable} ${newsreader.variable} ${workSans.variable}`}
     >
       <body className={plexSans.className}>
         <ThemeRegistry>{children}</ThemeRegistry>

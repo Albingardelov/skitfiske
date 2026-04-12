@@ -12,3 +12,16 @@ export const stickyBarSurfaceSx: SystemStyleObject<Theme> = {
   borderBottom: '1px solid',
   borderColor: 'var(--app-chrome-border)',
 };
+
+/**
+ * Samma yta som stickyBarSurfaceSx men utan sticky — använd i flexkolumner där
+ * en barn-lista har egen scroll (sticky + trasig höjdkedja ger “knäpp” layout).
+ */
+export const staticBarSurfaceSx: SystemStyleObject<Theme> = {
+  flexShrink: 0,
+  bgcolor: 'var(--app-chrome-bg)',
+  backdropFilter: 'blur(14px)',
+  WebkitBackdropFilter: 'blur(14px)',
+  borderBottom: '1px solid',
+  borderColor: 'var(--app-chrome-border)',
+};

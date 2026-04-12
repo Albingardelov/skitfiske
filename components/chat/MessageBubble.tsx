@@ -3,6 +3,7 @@
 // components/chat/MessageBubble.tsx
 import { useState } from 'react';
 import Box from '@mui/material/Box';
+import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Menu from '@mui/material/Menu';
@@ -12,8 +13,15 @@ import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 import Tooltip from '@mui/material/Tooltip';
 import { alpha, useTheme } from '@mui/material/styles';
+import { expedition } from '@/lib/theme/expeditionTokens';
 import { Check, MoreVertical, X } from 'lucide-react';
 import type { Message } from '@/types/chat';
+
+function initialsFromFullName(name: string) {
+  const p = name.trim().split(/\s+/).filter(Boolean);
+  if (p.length >= 2) return `${p[0][0] ?? ''}${p[1][0] ?? ''}`.toUpperCase();
+  return name.slice(0, 2).toUpperCase();
+}
 
 interface Props {
   message: Message;
@@ -24,11 +32,16 @@ interface Props {
 
 export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Props) {
   const theme = useTheme();
-  const ownBubbleBg = alpha(theme.palette.primary.main, 0.28);
+  const isLight = theme.palette.mode === 'light';
+  const ownBubbleBg = isOwn
+    ? isLight
+      ? expedition.forest
+      : alpha(theme.palette.primary.main, 0.32)
+    : 'transparent';
   const otherBubbleBg =
     theme.palette.mode === 'dark'
       ? alpha(theme.palette.common.white, 0.055)
-      : alpha(theme.palette.common.black, 0.06);
+      : '#ECEAE6';
   const isPending = message.status === 'pending';
   const isError = message.status === 'error';
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -76,25 +89,35 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
         px: 2,
       }}
     >
-      {!isOwn && (
-        <Typography variant="caption" sx={{ color: 'text.secondary', mb: 0.5, fontWeight: 500 }}>
-          {message.full_name}
-        </Typography>
-      )}
       <Box
         sx={{
           display: 'flex',
           flexDirection: isOwn ? 'row-reverse' : 'row',
           alignItems: 'flex-end',
-          gap: 0.5,
+          gap: 0.75,
           maxWidth: '100%',
         }}
       >
+        {!isOwn && (
+          <Avatar
+            sx={{
+              width: 34,
+              height: 34,
+              fontSize: '0.7rem',
+              fontWeight: 600,
+              mb: 0.25,
+              bgcolor: isLight ? 'rgba(27,48,34,0.12)' : 'rgba(255,255,255,0.1)',
+              color: 'text.primary',
+            }}
+          >
+            {initialsFromFullName(message.full_name)}
+          </Avatar>
+        )}
         <Box
           sx={{
-            maxWidth: '80%',
+            maxWidth: isOwn ? '78%' : 'calc(78% - 8px)',
             bgcolor: isOwn ? ownBubbleBg : otherBubbleBg,
-            color: 'text.primary',
+            color: isOwn && isLight ? '#fff' : 'text.primary',
             borderRadius: isOwn ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
             px: 1.75,
             py: 1.15,
@@ -153,7 +176,14 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
             </Box>
           ) : (
             message.content && (
-              <Typography variant="body2" sx={{ lineHeight: 1.45 }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  lineHeight: 1.45,
+                  fontFamily: 'var(--font-work), var(--font-sans), sans-serif',
+                  color: isOwn && isLight ? 'rgba(255,255,255,0.96)' : 'inherit',
+                }}
+              >
                 {message.content}
               </Typography>
             )
@@ -168,9 +198,12 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
               onClick={(e) => setAnchorEl(e.currentTarget)}
               sx={{
                 mb: 0.25,
-                color: 'text.secondary',
+                color: isOwn && isLight ? 'rgba(255,255,255,0.85)' : 'text.secondary',
                 opacity: 0.9,
-                '&:hover': { opacity: 1, bgcolor: 'action.hover' },
+                '&:hover': {
+                  opacity: 1,
+                  bgcolor: isOwn && isLight ? 'rgba(255,255,255,0.12)' : 'action.hover',
+                },
               }}
             >
               <MoreVertical size={18} strokeWidth={2} />
@@ -180,12 +213,21 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
       </Box>
       <Typography
         variant="caption"
-        sx={{ color: 'text.secondary', mt: 0.35, opacity: 0.75, fontSize: '0.68rem' }}
+        sx={{
+          alignSelf: isOwn ? 'flex-end' : 'flex-start',
+          ml: isOwn ? 0 : 5.5,
+          color: 'text.secondary',
+          mt: 0.35,
+          opacity: 0.75,
+          fontSize: '0.68rem',
+          fontFamily: 'var(--font-work), var(--font-sans), sans-serif',
+        }}
       >
         {new Date(message.created_at).toLocaleTimeString('sv-SE', {
           hour: '2-digit',
           minute: '2-digit',
         })}
+        {!isOwn && ` · ${message.full_name.split(' ')[0] ?? message.full_name}`}
       </Typography>
 
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>

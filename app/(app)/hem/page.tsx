@@ -4,22 +4,36 @@ import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
+import Link from '@mui/material/Link';
 import { alpha, useTheme } from '@mui/material/styles';
+import NextLink from 'next/link';
+import { ChevronRight } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { fetchMyCatches, fetchAllCatches } from '@/lib/supabase/catches';
+import HemScreenHeader from '@/components/home/HemScreenHeader';
 import HemHero from '@/components/home/HemHero';
-import StatsRow from '@/components/home/StatsRow';
+import SeasonPerformanceSection from '@/components/home/SeasonPerformanceSection';
+import TackleBoxInsightsCard from '@/components/home/TackleBoxInsightsCard';
+import UpcomingHatchCard from '@/components/home/UpcomingHatchCard';
+import HomeFab from '@/components/home/HomeFab';
 import CatchCard from '@/components/catch/CatchCard';
-import { hemTheme } from '@/lib/hemTheme';
+import { expedition } from '@/lib/theme/expeditionTokens';
 import type { Catch } from '@/types/catch';
 
 function HemSkeleton() {
   const theme = useTheme();
+  const isLight = theme.palette.mode === 'light';
   const skelBg = alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.12 : 0.08);
   const skelBg2 = alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.1 : 0.06);
 
   return (
-    <Box sx={{ bgcolor: 'background.default', flex: 1, minHeight: 0 }}>
+    <Box
+      sx={{
+        bgcolor: isLight ? expedition.canvasWarm : 'background.default',
+        flex: 1,
+        minHeight: 0,
+      }}
+    >
       <Box sx={{ px: 2, pt: 2 }}>
         <Skeleton variant="rounded" height={320} sx={{ borderRadius: '24px', bgcolor: skelBg }} />
       </Box>
@@ -68,71 +82,110 @@ export default function HemPage() {
       .catch(() => setIsLoading(false));
   }, []);
 
-  const heaviestKg =
-    myCatches.length > 0 ? Math.max(...myCatches.map((c) => c.weight_kg)) : null;
-  const longestCm =
-    myCatches.length > 0 ? Math.max(...myCatches.map((c) => c.length_cm)) : null;
-
   if (isLoading) {
-    return <HemSkeleton />;
+    return (
+      <Box
+        sx={{
+          flex: 1,
+          minHeight: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          bgcolor: isLight ? expedition.canvasWarm : 'background.default',
+        }}
+      >
+        <HemScreenHeader />
+        <HemSkeleton />
+      </Box>
+    );
   }
 
   return (
     <Box
       sx={{
-        bgcolor: 'background.default',
+        bgcolor: isLight ? expedition.canvasWarm : 'background.default',
         color: 'text.primary',
         flex: 1,
         minHeight: 0,
-        pb: 4,
+        pb: 'calc(96px + env(safe-area-inset-bottom, 0px))',
+        overflowY: 'auto',
       }}
     >
+      <HemScreenHeader />
       <HemHero firstName={firstName} />
 
-      <StatsRow
-        count={myCatches.length}
-        heaviestKg={heaviestKg}
-        longestCm={longestCm}
-        variant={isLight ? 'light' : 'default'}
-      />
+      <SeasonPerformanceSection catches={myCatches} />
 
-      <Box sx={{ px: 2, mb: 1.5, mt: 1 }}>
-        <Box
+      <Box
+        sx={{
+          px: 2,
+          mt: 2.5,
+          mb: 1,
+          display: 'flex',
+          alignItems: 'baseline',
+          justifyContent: 'space-between',
+          gap: 1,
+        }}
+      >
+        <Box>
+          <Typography
+            sx={{
+              fontFamily: 'var(--font-newsreader), Georgia, serif',
+              fontWeight: 700,
+              fontSize: '1.2rem',
+              letterSpacing: '-0.02em',
+              color: 'text.primary',
+            }}
+          >
+            Senaste aktivitet
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              fontFamily: 'var(--font-work), var(--font-sans), sans-serif',
+              color: 'text.secondary',
+              mt: 0.35,
+            }}
+          >
+            Rapporter från klubben
+          </Typography>
+        </Box>
+        <Link
+          component={NextLink}
+          href="/logbok"
+          underline="hover"
           sx={{
-            width: 28,
-            height: 3,
-            borderRadius: 1,
-            bgcolor: isLight ? hemTheme.rust : 'secondary.main',
-            mb: 1.25,
-          }}
-        />
-        <Typography
-          sx={{
-            fontFamily: 'var(--font-display-editorial), Georgia, serif',
-            fontWeight: 700,
-            fontSize: '1.35rem',
-            letterSpacing: '-0.02em',
-            color: 'text.primary',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 0.25,
+            fontFamily: 'var(--font-work), var(--font-sans), sans-serif',
+            fontWeight: 600,
+            fontSize: '0.8125rem',
+            color: isLight ? expedition.forest : 'primary.main',
+            whiteSpace: 'nowrap',
           }}
         >
-          Senaste i klubben
-        </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
-          Rapporter från medlemmarna
-        </Typography>
+          Visa allt
+          <ChevronRight size={16} aria-hidden />
+        </Link>
       </Box>
 
       {clubFeed.length === 0 ? (
         <Box sx={{ px: 2 }}>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          <Typography
+            variant="body2"
+            sx={{ fontFamily: 'var(--font-work), var(--font-sans), sans-serif', color: 'text.secondary' }}
+          >
             Inga fångster registrerade än.
           </Typography>
         </Box>
       ) : (
-        clubFeed.map((c) => (
-          <CatchCard key={c.id} catch={c} variant={isLight ? 'light' : 'default'} />
-        ))
+        clubFeed.map((c) => <CatchCard key={c.id} catch={c} variant={isLight ? 'light' : 'default'} />)
       )}
+
+      <TackleBoxInsightsCard />
+      <UpcomingHatchCard />
+
+      <HomeFab />
     </Box>
   );
 }

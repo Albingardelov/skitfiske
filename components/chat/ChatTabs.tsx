@@ -4,7 +4,7 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { alpha } from '@mui/material/styles';
-import { stickyBarSurfaceSx } from '@/lib/appChrome';
+import { staticBarSurfaceSx } from '@/lib/appChrome';
 import type { Channel } from '@/types/chat';
 
 interface Props {
@@ -17,7 +17,7 @@ export default function ChatTabs({ channels, activeChannelId, onChannelChange }:
   return (
     <Box
       sx={[
-        stickyBarSurfaceSx,
+        staticBarSurfaceSx,
         {
           px: 2,
           py: 1.25,

@@ -12,27 +12,21 @@ describe('MessageInput', () => {
   it('skicka-knappen är disabled när input är tom', () => {
     const onSend = jest.fn();
     renderWithTheme(<MessageInput onSend={onSend} />);
-    // Lucide Send-ikon renderas inuti en IconButton — aria-label finns på knappen
-    const buttons = screen.getAllByRole('button');
-    const sendButton = buttons[buttons.length - 1]; // sista knappen är Skicka
-    expect(sendButton).toBeDisabled();
+    expect(screen.getByRole('button', { name: /skicka/i })).toBeDisabled();
   });
 
   it('skicka-knappen aktiveras när text skrivs', async () => {
     const onSend = jest.fn();
     renderWithTheme(<MessageInput onSend={onSend} />);
     await userEvent.type(screen.getByRole('textbox'), 'Hej!');
-    const buttons = screen.getAllByRole('button');
-    const sendButton = buttons[buttons.length - 1];
-    expect(sendButton).not.toBeDisabled();
+    expect(screen.getByRole('button', { name: /skicka/i })).not.toBeDisabled();
   });
 
   it('anropar onSend med text och null bild vid klick', async () => {
     const onSend = jest.fn();
     renderWithTheme(<MessageInput onSend={onSend} />);
     await userEvent.type(screen.getByRole('textbox'), 'Testmeddelande');
-    const buttons = screen.getAllByRole('button');
-    await userEvent.click(buttons[buttons.length - 1]);
+    await userEvent.click(screen.getByRole('button', { name: /skicka/i }));
     expect(onSend).toHaveBeenCalledWith('Testmeddelande', null);
   });
 
@@ -41,8 +35,7 @@ describe('MessageInput', () => {
     renderWithTheme(<MessageInput onSend={onSend} />);
     const input = screen.getByRole('textbox');
     await userEvent.type(input, 'Test');
-    const buttons = screen.getAllByRole('button');
-    await userEvent.click(buttons[buttons.length - 1]);
+    await userEvent.click(screen.getByRole('button', { name: /skicka/i }));
     expect(input).toHaveValue('');
   });
 

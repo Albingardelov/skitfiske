@@ -11,6 +11,7 @@ export default function AppHeader() {
       sx={{
         display: 'flex',
         alignItems: 'center',
+        flexShrink: 0,
         minHeight: 56,
         px: 2,
         py: 0.5,

@@ -3,10 +3,12 @@
 import { useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import InputBase from '@mui/material/InputBase';
-import { alpha } from '@mui/material/styles';
+import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
-import { Camera, Send } from 'lucide-react';
+import { alpha, useTheme } from '@mui/material/styles';
+import { Plus, Send } from 'lucide-react';
+import { expedition } from '@/lib/theme/expeditionTokens';
 
 interface Props {
   onSend: (content: string | null, imageFile: File | null) => void;
@@ -14,6 +16,8 @@ interface Props {
 }
 
 export default function MessageInput({ onSend, disabled }: Props) {
+  const theme = useTheme();
+  const isLight = theme.palette.mode === 'light';
   const [text, setText] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [snackbar, setSnackbar] = useState<string | null>(null);
@@ -49,32 +53,30 @@ export default function MessageInput({ onSend, disabled }: Props) {
     <>
       <Box
         sx={{
+          flexShrink: 0,
           px: 2,
           pt: 1.25,
           pb: 'calc(12px + env(safe-area-inset-bottom, 0px))',
           borderTop: '1px solid',
           borderColor: 'divider',
-          bgcolor: 'var(--app-nav-bg)',
-          backdropFilter: 'blur(14px)',
-          WebkitBackdropFilter: 'blur(14px)',
+          bgcolor: isLight ? expedition.canvasWarm : 'background.default',
         }}
       >
         <Box
-          sx={(theme) => ({
+          sx={{
             display: 'flex',
-            alignItems: 'flex-end',
+            alignItems: 'center',
             gap: 1,
             p: 1,
-            borderRadius: 3,
-            bgcolor:
-              theme.palette.mode === 'dark'
-                ? alpha(theme.palette.common.white, 0.06)
-                : alpha(theme.palette.common.black, 0.04),
+            pl: 1.25,
+            borderRadius: 999,
+            bgcolor: isLight ? '#fff' : theme.palette.background.paper,
             border: '1px solid',
-            borderColor: 'divider',
+            borderColor: isLight ? 'rgba(27, 28, 28, 0.08)' : 'divider',
+            boxShadow: isLight ? '0 4px 20px rgba(0,0,0,0.06)' : 'none',
             maxWidth: 720,
             mx: 'auto',
-          })}
+          }}
         >
           <input
             ref={fileInputRef}
@@ -88,14 +90,15 @@ export default function MessageInput({ onSend, disabled }: Props) {
             onClick={() => fileInputRef.current?.click()}
             disabled={disabled}
             sx={{
-              width: 44,
-              height: 44,
+              width: 40,
+              height: 40,
               flexShrink: 0,
-              color: imageFile ? 'primary.light' : 'text.secondary',
+              bgcolor: isLight ? 'rgba(27,48,34,0.06)' : alpha(theme.palette.common.white, 0.08),
+              color: imageFile ? 'primary.main' : 'text.secondary',
             }}
-            aria-label="Välj bild"
+            aria-label="Bifoga bild"
           >
-            <Camera size={22} />
+            <Plus size={22} strokeWidth={2.25} />
           </IconButton>
           <InputBase
             fullWidth
@@ -109,35 +112,42 @@ export default function MessageInput({ onSend, disabled }: Props) {
             onKeyDown={handleKeyDown}
             disabled={disabled}
             sx={{
-              py: 1,
+              py: 0.5,
               px: 0.5,
               fontSize: '0.9375rem',
               lineHeight: 1.45,
               color: 'text.primary',
+              fontFamily: 'var(--font-work), var(--font-sans), sans-serif',
             }}
           />
-          <IconButton
-            onClick={handleSend}
+          <Button
+            variant="contained"
+            disableElevation
             disabled={!canSend}
+            onClick={handleSend}
+            endIcon={<Send size={18} strokeWidth={2.25} />}
             sx={{
-              width: 46,
-              height: 46,
               flexShrink: 0,
-              borderRadius: '50%',
-              bgcolor: canSend ? '#c4a667' : 'rgba(255,255,255,0.06)',
-              color: canSend ? '#12151a' : 'text.disabled',
-              '&:hover': {
-                bgcolor: canSend ? '#d4bc85' : 'action.hover',
-              },
+              borderRadius: 999,
+              px: 2,
+              py: 1,
+              minWidth: 0,
+              textTransform: 'none',
+              fontFamily: 'var(--font-work), var(--font-sans), sans-serif',
+              fontWeight: 800,
+              fontSize: '0.68rem',
+              letterSpacing: '0.12em',
+              bgcolor: isLight ? expedition.forest : 'primary.main',
+              color: '#fff',
+              '&:hover': { bgcolor: isLight ? '#14261a' : 'primary.light' },
               '&.Mui-disabled': {
-                bgcolor: 'rgba(255,255,255,0.04)',
+                bgcolor: alpha(theme.palette.text.primary, 0.12),
                 color: 'text.disabled',
               },
             }}
-            aria-label="Skicka"
           >
-            <Send size={20} strokeWidth={2.25} />
-          </IconButton>
+            SKICKA
+          </Button>
         </Box>
       </Box>
       <Snackbar

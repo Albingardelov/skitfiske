@@ -17,6 +17,7 @@ const baseCatch: Catch = {
   image_url: null,
   caught_at: '2026-04-11T10:23:00Z',
   created_at: '2026-04-11T10:23:00Z',
+  bait: null,
 };
 
 function renderWithTheme(ui: React.ReactElement) {
@@ -61,5 +62,15 @@ describe('CatchCard', () => {
     renderWithTheme(<CatchCard catch={baseCatch} />);
     expect(screen.queryByRole('img')).not.toBeInTheDocument();
     expect(screen.getByText('Ingen bild')).toBeInTheDocument();
+  });
+
+  it('logbook-variant: visar vetenskapligt namn för känd art', () => {
+    renderWithTheme(<CatchCard catch={baseCatch} variant="logbook" />);
+    expect(screen.getByText('Esox lucius')).toBeInTheDocument();
+  });
+
+  it('logbook-variant: visar vikt i pill med svenskt format', () => {
+    renderWithTheme(<CatchCard catch={baseCatch} variant="logbook" />);
+    expect(screen.getByText(/2,4\s*kg/)).toBeInTheDocument();
   });
 });

@@ -7,9 +7,10 @@ import type { Catch } from '@/types/catch';
 interface Props {
   catches: Catch[];
   isLoading: boolean;
+  cardVariant?: 'default' | 'light' | 'logbook';
 }
 
-export default function CatchList({ catches, isLoading }: Props) {
+export default function CatchList({ catches, isLoading, cardVariant = 'default' }: Props) {
   if (isLoading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', pt: 4 }}>
@@ -45,9 +46,9 @@ export default function CatchList({ catches, isLoading }: Props) {
   }
 
   return (
-    <Box sx={{ overflowY: 'auto', flex: 1, py: 1 }}>
+    <Box sx={{ overflowY: 'auto', flex: 1, minHeight: 0, py: 1 }}>
       {catches.map((c) => (
-        <CatchCard key={c.id} catch={c} />
+        <CatchCard key={c.id} catch={c} variant={cardVariant} />
       ))}
     </Box>
   );

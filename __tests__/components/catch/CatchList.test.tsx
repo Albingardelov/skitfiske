@@ -17,6 +17,7 @@ const makeCatch = (id: string, species: string): Catch => ({
   image_url: null,
   caught_at: '2026-04-11T10:00:00Z',
   created_at: '2026-04-11T10:00:00Z',
+  bait: null,
 });
 
 function renderWithTheme(ui: React.ReactElement) {
