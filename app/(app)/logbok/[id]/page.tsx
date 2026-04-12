@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
+import Modal from '@mui/material/Modal';
 import { ArrowLeft, Map } from 'lucide-react';
 import { fetchCatch } from '@/lib/supabase/catches';
 import type { Catch } from '@/types/catch';
@@ -17,6 +18,7 @@ export default function FangstDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [catch_, setCatch_] = useState<Catch | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   useEffect(() => {
     fetchCatch(id)
@@ -78,12 +80,35 @@ export default function FangstDetailPage() {
       </Box>
 
       {catch_.image_url && (
-        <Box
-          component="img"
-          src={catch_.image_url}
-          alt={catch_.species}
-          sx={{ width: '100%', maxHeight: 300, objectFit: 'cover' }}
-        />
+        <>
+          <Box
+            component="img"
+            src={catch_.image_url}
+            alt={catch_.species}
+            onClick={() => setLightboxOpen(true)}
+            sx={{ width: '100%', maxHeight: 300, objectFit: 'cover', cursor: 'zoom-in' }}
+          />
+          <Modal open={lightboxOpen} onClose={() => setLightboxOpen(false)}>
+            <Box
+              onClick={() => setLightboxOpen(false)}
+              sx={{
+                position: 'fixed',
+                inset: 0,
+                bgcolor: 'rgba(0,0,0,0.9)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Box
+                component="img"
+                src={catch_.image_url}
+                alt={catch_.species}
+                sx={{ maxWidth: '95vw', maxHeight: '90vh', objectFit: 'contain', borderRadius: 1 }}
+              />
+            </Box>
+          </Modal>
+        </>
       )}
 
       <Box sx={{ px: 2, pt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
