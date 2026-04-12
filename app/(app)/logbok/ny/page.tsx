@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import NextLink from 'next/link';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
+import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -15,7 +16,7 @@ import Snackbar from '@mui/material/Snackbar';
 import { ArrowLeft, MapPin, Camera } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { insertCatch, uploadCatchImage } from '@/lib/supabase/catches';
-import { stickyBarSurfaceSx } from '@/lib/appChrome';
+import { formFieldReadableSx, stickyBarSurfaceSx } from '@/lib/appChrome';
 import type { WeatherSnapshot } from '@/lib/weather/types';
 import { weatherSummarySv } from '@/lib/weather/format';
 import { useClub } from '@/contexts/ClubContext';
@@ -27,6 +28,7 @@ function getLocalDatetimeString() {
 }
 
 function NyFangstForm() {
+  const theme = useTheme();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { activeClub } = useClub();
@@ -174,8 +176,25 @@ function NyFangstForm() {
     }
   }
 
+  const outlinedBtnSx = {
+    color: 'primary.light',
+    borderColor: 'primary.light',
+    borderWidth: 2,
+    '&:hover': {
+      borderColor: 'primary.main',
+      bgcolor: 'rgba(169, 208, 175, 0.12)',
+    },
+  } as const;
+
   return (
-    <Box sx={{ pb: 4 }}>
+    <Box
+      sx={{
+        pb: 4,
+        minHeight: '100%',
+        bgcolor: 'background.default',
+        color: 'text.primary',
+      }}
+    >
       <Box
         sx={[
           stickyBarSurfaceSx,
@@ -185,6 +204,8 @@ function NyFangstForm() {
             gap: 1,
             px: 1,
             py: 1,
+            color: 'text.primary',
+            '& .MuiIconButton-root': { color: 'text.primary' },
           },
         ]}
       >
@@ -192,9 +213,11 @@ function NyFangstForm() {
           <ArrowLeft size={24} />
         </IconButton>
         <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography variant="h6">Registrera fångst</Typography>
+          <Typography variant="h6" sx={{ color: 'text.primary' }}>
+            Registrera fångst
+          </Typography>
           {activeClub && (
-            <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
+            <Typography variant="caption" sx={{ color: 'text.primary', opacity: 0.75, display: 'block' }}>
               {activeClub.name}
             </Typography>
           )}
@@ -203,8 +226,8 @@ function NyFangstForm() {
 
       <Box sx={{ px: 2, display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
         {!activeClub && (
-          <Typography variant="body2" sx={{ color: 'error.main' }}>
-            <Link component={NextLink} href="/klubb" underline="always">
+          <Typography variant="body2" sx={{ color: 'error.light' }}>
+            <Link component={NextLink} href="/klubb" underline="always" sx={{ color: 'error.light', fontWeight: 600 }}>
               Skapa eller gå med i en klubb
             </Link>{' '}
             innan du sparar en fångst.
@@ -215,6 +238,7 @@ function NyFangstForm() {
           value={species}
           onChange={(e) => setSpecies(e.target.value)}
           fullWidth
+          sx={formFieldReadableSx}
         />
         <TextField
           label="Vikt (kg) *"
@@ -223,6 +247,7 @@ function NyFangstForm() {
           value={weightKg}
           onChange={(e) => setWeightKg(e.target.value)}
           fullWidth
+          sx={formFieldReadableSx}
         />
         <TextField
           label="Längd (cm) *"
@@ -231,6 +256,7 @@ function NyFangstForm() {
           value={lengthCm}
           onChange={(e) => setLengthCm(e.target.value)}
           fullWidth
+          sx={formFieldReadableSx}
         />
         <TextField
           label="Bete"
@@ -238,6 +264,7 @@ function NyFangstForm() {
           onChange={(e) => setBait(e.target.value)}
           fullWidth
           placeholder="t.ex. Rapala, mask, fluga"
+          sx={formFieldReadableSx}
         />
         <TextField
           label="Datum & tid *"
@@ -246,20 +273,29 @@ function NyFangstForm() {
           onChange={(e) => setCaughtAt(e.target.value)}
           fullWidth
           slotProps={{ inputLabel: { shrink: true } }}
+          sx={formFieldReadableSx}
         />
 
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           <Button
             variant="outlined"
-            startIcon={gpsLoading ? <CircularProgress size={16} /> : <MapPin size={16} />}
+            color="primary"
+            startIcon={
+              gpsLoading ? (
+                <CircularProgress size={16} sx={{ color: 'primary.main' }} />
+              ) : (
+                <MapPin size={16} strokeWidth={2} />
+              )
+            }
             onClick={handleGetGps}
             disabled={gpsLoading}
             fullWidth
+            sx={outlinedBtnSx}
           >
             {lat ? 'GPS-position hämtad' : 'Hämta GPS-position'}
           </Button>
           {gpsError && (
-            <Typography variant="caption" sx={{ color: 'error.main' }}>
+            <Typography variant="caption" sx={{ color: 'error.light' }}>
               {gpsError}
             </Typography>
           )}
@@ -269,19 +305,20 @@ function NyFangstForm() {
             onChange={(e) => setLocationText(e.target.value)}
             fullWidth
             placeholder="t.ex. Mälaren, norra stranden"
+            sx={formFieldReadableSx}
           />
           {lat != null && lng != null && (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, pl: 0.25 }}>
               {weatherStatus === 'loading' && (
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <CircularProgress size={14} />
-                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                  <CircularProgress size={14} sx={{ color: 'primary.light' }} />
+                  <Typography variant="caption" sx={{ color: 'text.primary', opacity: 0.85 }}>
                     Hämtar väder …
                   </Typography>
                 </Box>
               )}
               {weatherStatus === 'ok' && weather && (
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                <Typography variant="body2" sx={{ color: 'text.primary', opacity: 0.88, lineHeight: 1.45 }}>
                   {weatherSummarySv({
                     sea: weather.seaSurfaceTempC,
                     air: weather.airTempC,
@@ -289,7 +326,7 @@ function NyFangstForm() {
                 </Typography>
               )}
               {weatherStatus === 'error' && (
-                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                <Typography variant="caption" sx={{ color: 'text.primary', opacity: 0.8 }}>
                   Väder kunde inte hämtas just nu — du kan spara utan temperatur.
                 </Typography>
               )}
@@ -307,9 +344,11 @@ function NyFangstForm() {
           />
           <Button
             variant="outlined"
-            startIcon={<Camera size={16} />}
+            color="primary"
+            startIcon={<Camera size={16} strokeWidth={2} />}
             onClick={() => fileInputRef.current?.click()}
             fullWidth
+            sx={outlinedBtnSx}
           >
             {imageFile ? imageFile.name : 'Välj bild'}
           </Button>
@@ -332,12 +371,22 @@ function NyFangstForm() {
 
         <Button
           variant="contained"
+          color="primary"
           fullWidth
           disabled={!canSave}
           onClick={handleSubmit}
-          sx={{ mt: 1 }}
+          sx={{
+            mt: 1,
+            bgcolor: 'primary.main',
+            color: 'primary.contrastText',
+            '&:hover': { bgcolor: 'primary.light' },
+            '&.Mui-disabled': {
+              bgcolor: theme.palette.action.disabledBackground,
+              color: theme.palette.action.disabled,
+            },
+          }}
         >
-          {isSaving ? <CircularProgress size={24} color="inherit" /> : 'Spara fångst'}
+          {isSaving ? <CircularProgress size={24} sx={{ color: 'primary.contrastText' }} /> : 'Spara fångst'}
         </Button>
       </Box>
       <Snackbar

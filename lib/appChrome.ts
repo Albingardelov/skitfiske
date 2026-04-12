@@ -25,3 +25,26 @@ export const staticBarSurfaceSx: SystemStyleObject<Theme> = {
   borderBottom: '1px solid',
   borderColor: 'var(--app-chrome-border)',
 };
+
+/** Outlined TextField — tydlig text/etikett/kant i mörkt läge (MUI default kan bli nästan osynlig). */
+export const formFieldReadableSx: SystemStyleObject<Theme> = {
+  '& .MuiOutlinedInput-root': {
+    color: 'text.primary',
+  },
+  '& .MuiInputLabel-root': {
+    color: 'text.secondary',
+  },
+  '& .MuiInputLabel-root.Mui-focused': {
+    color: 'primary.main',
+  },
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'divider',
+  },
+  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'primary.light',
+  },
+  '& .MuiOutlinedInput-input::placeholder': {
+    opacity: 1,
+    color: 'text.secondary',
+  },
+};

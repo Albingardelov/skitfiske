@@ -74,7 +74,7 @@ function KartaContent() {
     <Box
       sx={{
         flex: 1,
-        minHeight: 0,
+        minHeight: { xs: 'calc(100dvh - 140px)', sm: 0 },
         position: 'relative',
         width: '100%',
       }}

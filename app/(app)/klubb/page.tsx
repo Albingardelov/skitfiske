@@ -16,30 +16,8 @@ import IconButton from '@mui/material/IconButton';
 import CircularProgress from '@mui/material/CircularProgress';
 import { ArrowLeft, Building2, KeyRound } from 'lucide-react';
 import { useClub } from '@/contexts/ClubContext';
-import { stickyBarSurfaceSx } from '@/lib/appChrome';
+import { formFieldReadableSx, stickyBarSurfaceSx } from '@/lib/appChrome';
 import { supabaseErrorMessage } from '@/lib/supabase/errorMessage';
-
-const fieldReadableSx = {
-  '& .MuiOutlinedInput-root': {
-    color: 'text.primary',
-  },
-  '& .MuiInputLabel-root': {
-    color: 'text.secondary',
-  },
-  '& .MuiInputLabel-root.Mui-focused': {
-    color: 'primary.main',
-  },
-  '& .MuiOutlinedInput-notchedOutline': {
-    borderColor: 'divider',
-  },
-  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-    borderColor: 'primary.light',
-  },
-  '& .MuiOutlinedInput-input::placeholder': {
-    opacity: 1,
-    color: 'text.secondary',
-  },
-} as const;
 
 export default function KlubbPage() {
   const theme = useTheme();
@@ -198,7 +176,7 @@ export default function KlubbPage() {
             onChange={(e) => setName(e.target.value)}
             fullWidth
             placeholder="t.ex. Norra Mälarens FVO"
-            sx={fieldReadableSx}
+            sx={formFieldReadableSx}
           />
           <Button
             variant="contained"
@@ -234,7 +212,7 @@ export default function KlubbPage() {
             fullWidth
             placeholder="Sex tecken"
             slotProps={{ htmlInput: { maxLength: 12 } }}
-            sx={fieldReadableSx}
+            sx={formFieldReadableSx}
           />
           <Button
             variant="outlined"

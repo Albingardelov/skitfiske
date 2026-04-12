@@ -22,7 +22,7 @@ export default function AppHeader() {
         borderColor: 'var(--app-chrome-border)',
       }}
     >
-      <Image src="/logo.png" alt="Skitfiske" width={40} height={40} priority />
+      <Image src="/logo.svg" alt="Skitfiske" width={40} height={40} priority unoptimized />
       <ColorModeMenuButton />
     </Box>
   );

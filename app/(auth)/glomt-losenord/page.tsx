@@ -73,10 +73,11 @@ export default function ForgotPasswordPage() {
       }}
     >
       <Image
-        src="/logo.png"
+        src="/logo.svg"
         alt="Skitfiske"
         width={160}
         height={160}
+        unoptimized
         style={{ marginBottom: 12, width: 140, height: 'auto' }}
       />
       <Typography variant="h4" sx={{ mb: 1, textAlign: 'center', letterSpacing: '-0.03em' }}>
