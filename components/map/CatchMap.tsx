@@ -42,12 +42,12 @@ export default function CatchMap({ catches, onMapClick, focusLat, focusLng }: Pr
       className="skitfiske-map"
       center={[62.0, 15.0]}
       zoom={5}
-      style={{ height: '100%', width: '100%', background: '#0c0f14' }}
+      style={{ height: '100%', width: '100%', background: '#d4dadc' }}
       zoomControl
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <CatchMarkerLayer catches={catches} onMapClick={onMapClick} />
       {userPos && (
