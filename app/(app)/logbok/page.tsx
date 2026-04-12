@@ -5,7 +5,8 @@ import { useState, useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import { createClient } from '@/lib/supabase/client';
-import { fetchMyCatches, fetchAllCatches } from '@/lib/supabase/catches';
+import { useClub } from '@/contexts/ClubContext';
+import { fetchMyCatches, fetchClubCatches } from '@/lib/supabase/catches';
 import CatchList from '@/components/catch/CatchList';
 import EditorialShellHeader from '@/components/layout/EditorialShellHeader';
 import LogbokSegmentControl from '@/components/logbok/LogbokSegmentControl';
@@ -17,6 +18,7 @@ import type { Catch } from '@/types/catch';
 export default function LogbokPage() {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
+  const { isReady, activeClub } = useClub();
   const [tab, setTab] = useState(0);
   const [speciesFilter, setSpeciesFilter] = useState<string | null>(null);
   const [catches, setCatches] = useState<Catch[]>([]);
@@ -35,14 +37,20 @@ export default function LogbokPage() {
   }, [tab]);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || !isReady) return;
+    if (tab === 1 && !activeClub) {
+      setCatches([]);
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(true);
-    const load = tab === 0 ? fetchMyCatches(userId) : fetchAllCatches();
+    const load =
+      tab === 0 ? fetchMyCatches(userId) : fetchClubCatches(activeClub!.id);
     load
       .then((data) => setCatches(data))
       .catch(() => setCatches([]))
       .finally(() => setIsLoading(false));
-  }, [tab, userId]);
+  }, [tab, userId, isReady, activeClub?.id]);
 
   const speciesOptions = useMemo(() => {
     const set = new Set(catches.map((c) => c.species.trim()).filter(Boolean));

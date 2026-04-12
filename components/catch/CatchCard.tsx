@@ -9,6 +9,7 @@ import { MapPin } from 'lucide-react';
 import { hemTheme } from '@/lib/hemTheme';
 import { expedition } from '@/lib/theme/expeditionTokens';
 import { scientificNameForSpecies } from '@/lib/speciesLatin';
+import { weatherSummarySv } from '@/lib/weather/format';
 import type { Catch } from '@/types/catch';
 
 interface Props {
@@ -32,6 +33,7 @@ function LogbookCatchCard({ c }: { c: Catch }) {
   const forest = isLight ? expedition.forest : theme.palette.primary.dark;
   const rust = isLight ? expedition.rust : theme.palette.secondary.main;
   const latin = scientificNameForSpecies(c.species);
+  const weatherLine = weatherSummarySv({ sea: c.sea_surface_temp_c, air: c.air_temp_c });
 
   return (
     <Card
@@ -176,6 +178,19 @@ function LogbookCatchCard({ c }: { c: Catch }) {
                 {c.location_text}
               </Typography>
             </Box>
+          )}
+          {weatherLine && (
+            <Typography
+              sx={{
+                fontFamily: 'var(--font-work), var(--font-sans), system-ui, sans-serif',
+                fontSize: '0.72rem',
+                color: 'text.secondary',
+                mt: c.location_text ? 0.5 : 0,
+                fontFeatureSettings: '"tnum"',
+              }}
+            >
+              {weatherLine}
+            </Typography>
           )}
         </CardContent>
       </CardActionArea>

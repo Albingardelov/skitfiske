@@ -1,6 +1,18 @@
 // lib/supabase/chat.ts
 import { createClient } from '@/lib/supabase/client';
-import type { Message } from '@/types/chat';
+import type { Channel, Message } from '@/types/chat';
+
+export async function fetchChannelsForClub(clubId: string): Promise<Channel[]> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('channels')
+    .select('*')
+    .eq('club_id', clubId)
+    .order('name');
+
+  if (error) throw error;
+  return (data ?? []) as Channel[];
+}
 
 export async function fetchMessages(channelId: string, limit = 50): Promise<Message[]> {
   const supabase = createClient();

@@ -12,6 +12,7 @@ import Modal from '@mui/material/Modal';
 import { ArrowLeft, Map } from 'lucide-react';
 import { fetchCatch } from '@/lib/supabase/catches';
 import { stickyBarSurfaceSx } from '@/lib/appChrome';
+import { weatherSummarySv } from '@/lib/weather/format';
 import type { Catch } from '@/types/catch';
 
 export default function FangstDetailPage() {
@@ -57,6 +58,10 @@ export default function FangstDetailPage() {
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
+  });
+  const weatherLine = weatherSummarySv({
+    sea: catch_.sea_surface_temp_c,
+    air: catch_.air_temp_c,
   });
 
   return (
@@ -132,6 +137,11 @@ export default function FangstDetailPage() {
         {catch_.location_text && (
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             {catch_.location_text}
+          </Typography>
+        )}
+        {weatherLine && (
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {weatherLine}
           </Typography>
         )}
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>

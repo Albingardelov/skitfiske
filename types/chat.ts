@@ -3,6 +3,8 @@ export interface Channel {
   id: string;
   name: string;
   label: string;
+  /** När satt: kanal tillhör en specifik klubb. */
+  club_id?: string | null;
 }
 
 export interface Message {

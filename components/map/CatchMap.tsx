@@ -15,6 +15,22 @@ function FlyTo({ lat, lng }: { lat: number; lng: number }) {
   return null;
 }
 
+/** Leaflet behöver invalidateSize när containern får slutlig höjd (flex/layout). */
+function MapResizeFix() {
+  const map = useMap();
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      map.invalidateSize();
+    });
+    const t = window.setTimeout(() => map.invalidateSize(), 200);
+    return () => {
+      cancelAnimationFrame(id);
+      window.clearTimeout(t);
+    };
+  }, [map]);
+  return null;
+}
+
 interface Props {
   catches: Catch[];
   onMapClick: (lat: number, lng: number) => void;
@@ -45,6 +61,7 @@ export default function CatchMap({ catches, onMapClick, focusLat, focusLng }: Pr
       style={{ height: '100%', width: '100%', background: '#d4dadc' }}
       zoomControl
     >
+      <MapResizeFix />
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

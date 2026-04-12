@@ -14,10 +14,13 @@ const baseCatch: Catch = {
   location_text: 'Mälaren',
   lat: 59.33,
   lng: 18.07,
+  sea_surface_temp_c: null,
+  air_temp_c: null,
   image_url: null,
   caught_at: '2026-04-11T10:23:00Z',
   created_at: '2026-04-11T10:23:00Z',
   bait: null,
+  club_id: null,
 };
 
 function renderWithTheme(ui: React.ReactElement) {

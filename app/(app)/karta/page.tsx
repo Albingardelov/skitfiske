@@ -10,7 +10,8 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Fab from '@mui/material/Fab';
 import { Plus } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
-import { fetchMyCatches, fetchAllCatches } from '@/lib/supabase/catches';
+import { useClub } from '@/contexts/ClubContext';
+import { fetchMyCatches, fetchClubCatches } from '@/lib/supabase/catches';
 import type { Catch } from '@/types/catch';
 
 const CatchMap = dynamic(() => import('@/components/map/CatchMap'), { ssr: false });
@@ -18,6 +19,7 @@ const CatchMap = dynamic(() => import('@/components/map/CatchMap'), { ssr: false
 function KartaContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { isReady: clubReady, activeClub } = useClub();
   const focusLat = searchParams.get('lat') ? parseFloat(searchParams.get('lat')!) : undefined;
   const focusLng = searchParams.get('lng') ? parseFloat(searchParams.get('lng')!) : undefined;
   const [filter, setFilter] = useState<'mine' | 'all'>('all');
@@ -40,18 +42,25 @@ function KartaContent() {
   }, []);
 
   useEffect(() => {
-    if (!authDone) return;
+    if (!authDone || !clubReady) return;
     if (!userId) {
       setCatches([]);
+      setIsLoading(false);
+      return;
+    }
+    if (filter === 'all' && !activeClub) {
+      setCatches([]);
+      setIsLoading(false);
       return;
     }
     setIsLoading(true);
-    const load = filter === 'mine' ? fetchMyCatches(userId) : fetchAllCatches();
+    const load =
+      filter === 'mine' ? fetchMyCatches(userId) : fetchClubCatches(activeClub!.id);
     load
       .then(setCatches)
       .catch(() => setCatches([]))
       .finally(() => setIsLoading(false));
-  }, [authDone, filter, userId]);
+  }, [authDone, clubReady, filter, userId, activeClub?.id]);
 
   function handleMapClick(lat: number, lng: number) {
     router.push(`/logbok/ny?lat=${lat}&lng=${lng}`);
@@ -62,7 +71,14 @@ function KartaContent() {
   }
 
   return (
-    <Box sx={{ flex: 1, minHeight: 0, position: 'relative', height: '100%' }}>
+    <Box
+      sx={{
+        flex: 1,
+        minHeight: 0,
+        position: 'relative',
+        width: '100%',
+      }}
+    >
       {/* Filter toggle */}
       <ToggleButtonGroup
         value={filter}
@@ -82,11 +98,19 @@ function KartaContent() {
         <ToggleButton value="all">Alla</ToggleButton>
       </ToggleButtonGroup>
 
-      {/* Map */}
-      {authDone && !isLoading && (
-        <CatchMap catches={catches} onMapClick={handleMapClick} focusLat={focusLat} focusLng={focusLng} />
+      {/* Map — absolut positioned så Leaflet får garanterad höjd (flex + height:100% räcker inte alltid). */}
+      {authDone && clubReady && !isLoading && (
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 0,
+          }}
+        >
+          <CatchMap catches={catches} onMapClick={handleMapClick} focusLat={focusLat} focusLng={focusLng} />
+        </Box>
       )}
-      {(!authDone || isLoading) && (
+      {(!authDone || !clubReady || isLoading) && (
         <Box
           sx={{
             position: 'absolute',

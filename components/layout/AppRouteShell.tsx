@@ -9,7 +9,12 @@ const bottomInset = 'calc(76px + env(safe-area-inset-bottom, 0px))';
 
 export default function AppRouteShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const showAppHeader = pathname !== '/logbok' && pathname !== '/hem' && pathname !== '/chatt';
+  const showAppHeader =
+    pathname !== '/logbok' &&
+    pathname !== '/hem' &&
+    pathname !== '/chatt' &&
+    pathname !== '/klubb' &&
+    !pathname.startsWith('/klubb/');
 
   return (
     <Box

@@ -3,7 +3,9 @@
 
 import { useState, useRef, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import NextLink from 'next/link';
 import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -14,6 +16,9 @@ import { ArrowLeft, MapPin, Camera } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { insertCatch, uploadCatchImage } from '@/lib/supabase/catches';
 import { stickyBarSurfaceSx } from '@/lib/appChrome';
+import type { WeatherSnapshot } from '@/lib/weather/types';
+import { weatherSummarySv } from '@/lib/weather/format';
+import { useClub } from '@/contexts/ClubContext';
 
 function getLocalDatetimeString() {
   const now = new Date();
@@ -24,6 +29,7 @@ function getLocalDatetimeString() {
 function NyFangstForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { activeClub } = useClub();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [species, setSpecies] = useState('');
@@ -40,6 +46,8 @@ function NyFangstForm() {
   const [gpsLoading, setGpsLoading] = useState(false);
   const [gpsError, setGpsError] = useState<string | null>(null);
   const [snackbar, setSnackbar] = useState<string | null>(null);
+  const [weather, setWeather] = useState<WeatherSnapshot | null>(null);
+  const [weatherStatus, setWeatherStatus] = useState<'idle' | 'loading' | 'ok' | 'error'>('idle');
 
   useEffect(() => {
     const qLat = searchParams.get('lat');
@@ -55,9 +63,36 @@ function NyFangstForm() {
     }
   }, [searchParams]);
 
+  useEffect(() => {
+    if (lat == null || lng == null) {
+      setWeather(null);
+      setWeatherStatus('idle');
+      return;
+    }
+    const controller = new AbortController();
+    setWeatherStatus('loading');
+    setWeather(null);
+    fetch(`/api/weather?lat=${lat}&lng=${lng}`, { signal: controller.signal })
+      .then(async (r) => {
+        if (!r.ok) throw new Error('weather');
+        return r.json() as Promise<WeatherSnapshot>;
+      })
+      .then((data) => {
+        setWeather(data);
+        setWeatherStatus('ok');
+      })
+      .catch((e) => {
+        if (e instanceof Error && e.name === 'AbortError') return;
+        setWeather(null);
+        setWeatherStatus('error');
+      });
+    return () => controller.abort();
+  }, [lat, lng]);
+
   const parsedWeight = parseFloat(weightKg);
   const parsedLength = parseFloat(lengthCm);
   const canSave =
+    activeClub != null &&
     species.trim().length > 0 &&
     !isNaN(parsedWeight) && parsedWeight > 0 &&
     !isNaN(parsedLength) && parsedLength > 0 &&
@@ -112,6 +147,8 @@ function NyFangstForm() {
         imageUrl = await uploadCatchImage(userData.user.id, imageFile);
       }
 
+      if (!activeClub) throw new Error('Ingen klubb vald');
+
       await insertCatch({
         user_id: userData.user.id,
         full_name: userData.user.user_metadata?.full_name ?? 'Anonym',
@@ -122,8 +159,11 @@ function NyFangstForm() {
         location_text: locationText.trim() || null,
         lat,
         lng,
+        sea_surface_temp_c: weather?.seaSurfaceTempC ?? null,
+        air_temp_c: weather?.airTempC ?? null,
         image_url: imageUrl,
         caught_at: new Date(caughtAt).toISOString(),
+        club_id: activeClub.id,
       });
 
       setIsSaving(false);
@@ -151,10 +191,25 @@ function NyFangstForm() {
         <IconButton onClick={() => router.push('/logbok')} aria-label="Tillbaka">
           <ArrowLeft size={24} />
         </IconButton>
-        <Typography variant="h6">Registrera fångst</Typography>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Typography variant="h6">Registrera fångst</Typography>
+          {activeClub && (
+            <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
+              {activeClub.name}
+            </Typography>
+          )}
+        </Box>
       </Box>
 
       <Box sx={{ px: 2, display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
+        {!activeClub && (
+          <Typography variant="body2" sx={{ color: 'error.main' }}>
+            <Link component={NextLink} href="/klubb" underline="always">
+              Skapa eller gå med i en klubb
+            </Link>{' '}
+            innan du sparar en fångst.
+          </Typography>
+        )}
         <TextField
           label="Art *"
           value={species}
@@ -215,6 +270,31 @@ function NyFangstForm() {
             fullWidth
             placeholder="t.ex. Mälaren, norra stranden"
           />
+          {lat != null && lng != null && (
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, pl: 0.25 }}>
+              {weatherStatus === 'loading' && (
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <CircularProgress size={14} />
+                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                    Hämtar väder …
+                  </Typography>
+                </Box>
+              )}
+              {weatherStatus === 'ok' && weather && (
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  {weatherSummarySv({
+                    sea: weather.seaSurfaceTempC,
+                    air: weather.airTempC,
+                  }) ?? 'Ingen temperatur tillgänglig för denna punkt.'}
+                </Typography>
+              )}
+              {weatherStatus === 'error' && (
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                  Väder kunde inte hämtas just nu — du kan spara utan temperatur.
+                </Typography>
+              )}
+            </Box>
+          )}
         </Box>
 
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>

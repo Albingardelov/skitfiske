@@ -14,11 +14,13 @@ export async function fetchMyCatches(userId: string): Promise<Catch[]> {
   return data ?? [];
 }
 
-export async function fetchAllCatches(): Promise<Catch[]> {
+/** Alla fångster i en klubb (synliga för medlemmar enligt RLS). */
+export async function fetchClubCatches(clubId: string): Promise<Catch[]> {
   const supabase = createClient();
   const { data, error } = await supabase
     .from('catches')
     .select('*')
+    .eq('club_id', clubId)
     .order('caught_at', { ascending: false });
 
   if (error) throw error;

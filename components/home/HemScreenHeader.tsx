@@ -4,13 +4,17 @@ import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 import { useTheme } from '@mui/material/styles';
+import NextLink from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import ColorModeMenuButton from '@/components/theme/ColorModeMenuButton';
 import { expedition } from '@/lib/theme/expeditionTokens';
+import { useClub } from '@/contexts/ClubContext';
 
 export default function HemScreenHeader() {
   const theme = useTheme();
+  const { activeClub } = useClub();
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>();
   const [initials, setInitials] = useState('');
 
@@ -49,20 +53,30 @@ export default function HemScreenHeader() {
         borderColor: 'divider',
       }}
     >
-      <Typography
-        component="div"
-        sx={{
-          flex: 1,
-          fontFamily: 'var(--font-newsreader), Georgia, serif',
-          fontWeight: 700,
-          fontSize: '1.2rem',
-          letterSpacing: '-0.02em',
-          color: titleColor,
-          lineHeight: 1.2,
-        }}
-      >
-        Skitfiske
-      </Typography>
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Typography
+          component="div"
+          sx={{
+            fontFamily: 'var(--font-newsreader), Georgia, serif',
+            fontWeight: 700,
+            fontSize: '1.2rem',
+            letterSpacing: '-0.02em',
+            color: titleColor,
+            lineHeight: 1.2,
+          }}
+        >
+          Skitfiske
+        </Typography>
+        <Link
+          component={NextLink}
+          href="/klubb"
+          underline="hover"
+          variant="caption"
+          sx={{ color: 'text.secondary', fontWeight: 600 }}
+        >
+          {activeClub ? activeClub.name : 'Klubb'}
+        </Link>
+      </Box>
       <ColorModeMenuButton aria-label="Välj tema" sx={{ ml: 0 }} />
       <Avatar src={avatarUrl} alt="" sx={{ width: 40, height: 40, flexShrink: 0 }}>
         {initials}

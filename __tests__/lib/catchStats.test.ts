@@ -11,10 +11,13 @@ const base: Catch = {
   location_text: null,
   lat: null,
   lng: null,
+  sea_surface_temp_c: null,
+  air_temp_c: null,
   image_url: null,
   caught_at: '2026-01-01T00:00:00Z',
   created_at: '2026-01-01T00:00:00Z',
   bait: null,
+  club_id: null,
 };
 
 function makeCatch(over: Partial<Catch>): Catch {

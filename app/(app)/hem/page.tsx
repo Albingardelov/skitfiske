@@ -9,7 +9,8 @@ import { alpha, useTheme } from '@mui/material/styles';
 import NextLink from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
-import { fetchMyCatches, fetchAllCatches } from '@/lib/supabase/catches';
+import { useClub } from '@/contexts/ClubContext';
+import { fetchMyCatches, fetchClubCatches } from '@/lib/supabase/catches';
 import HemScreenHeader from '@/components/home/HemScreenHeader';
 import HemHero from '@/components/home/HemHero';
 import SeasonPerformanceSection from '@/components/home/SeasonPerformanceSection';
@@ -51,38 +52,52 @@ function HemSkeleton() {
 export default function HemPage() {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
+  const { isReady, activeClub } = useClub();
   const [firstName, setFirstName] = useState<string>('');
   const [myCatches, setMyCatches] = useState<Catch[]>([]);
   const [clubFeed, setClubFeed] = useState<Catch[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const supabase = createClient();
-    supabase.auth
-      .getUser()
-      .then(({ data }) => {
+    if (!isReady) return;
+    let cancelled = false;
+    setIsLoading(true);
+    createClient()
+      .auth.getUser()
+      .then(async ({ data }) => {
+        if (cancelled) return;
         const fullName = data.user?.user_metadata?.full_name ?? '';
         setFirstName(fullName.split(' ')[0]);
         const userId = data.user?.id;
-        if (!userId) {
-          setIsLoading(false);
+        if (!userId || !activeClub) {
+          setMyCatches([]);
+          setClubFeed([]);
           return;
         }
-        Promise.all([fetchMyCatches(userId), fetchAllCatches()])
-          .then(([mine, all]) => {
-            setMyCatches(mine);
-            setClubFeed(all.slice(0, 10));
-          })
-          .catch(() => {
-            setMyCatches([]);
-            setClubFeed([]);
-          })
-          .finally(() => setIsLoading(false));
+        const [mine, club] = await Promise.all([
+          fetchMyCatches(userId),
+          fetchClubCatches(activeClub.id),
+        ]);
+        if (!cancelled) {
+          setMyCatches(mine);
+          setClubFeed(club.slice(0, 10));
+        }
       })
-      .catch(() => setIsLoading(false));
-  }, []);
+      .catch(() => {
+        if (!cancelled) {
+          setMyCatches([]);
+          setClubFeed([]);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [isReady, activeClub?.id]);
 
-  if (isLoading) {
+  if (!isReady || isLoading) {
     return (
       <Box
         sx={{
