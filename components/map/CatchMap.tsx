@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, CircleMarker } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import CatchMarkerLayer from './CatchMarkerLayer';
@@ -15,12 +15,22 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
+function FlyTo({ lat, lng }: { lat: number; lng: number }) {
+  const map = useMap();
+  useEffect(() => {
+    map.flyTo([lat, lng], 14, { duration: 1.2 });
+  }, [map, lat, lng]);
+  return null;
+}
+
 interface Props {
   catches: Catch[];
   onMapClick: (lat: number, lng: number) => void;
+  focusLat?: number;
+  focusLng?: number;
 }
 
-export default function CatchMap({ catches, onMapClick }: Props) {
+export default function CatchMap({ catches, onMapClick, focusLat, focusLng }: Props) {
   const [userPos, setUserPos] = useState<[number, number] | null>(null);
 
   useEffect(() => {
@@ -52,6 +62,9 @@ export default function CatchMap({ catches, onMapClick }: Props) {
           radius={8}
           pathOptions={{ color: '#1976d2', fillColor: '#1976d2', fillOpacity: 0.8 }}
         />
+      )}
+      {focusLat !== undefined && focusLng !== undefined && (
+        <FlyTo lat={focusLat} lng={focusLng} />
       )}
     </MapContainer>
   );

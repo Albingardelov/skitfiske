@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Box from '@mui/material/Box';
 import ToggleButton from '@mui/material/ToggleButton';
@@ -14,9 +14,12 @@ import type { Catch } from '@/types/catch';
 
 const CatchMap = dynamic(() => import('@/components/map/CatchMap'), { ssr: false });
 
-export default function KartaPage() {
+function KartaContent() {
   const router = useRouter();
-  const [filter, setFilter] = useState<'mine' | 'all'>('mine');
+  const searchParams = useSearchParams();
+  const focusLat = searchParams.get('lat') ? parseFloat(searchParams.get('lat')!) : undefined;
+  const focusLng = searchParams.get('lng') ? parseFloat(searchParams.get('lng')!) : undefined;
+  const [filter, setFilter] = useState<'mine' | 'all'>('all');
   const [catches, setCatches] = useState<Catch[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
@@ -73,7 +76,7 @@ export default function KartaPage() {
 
       {/* Map */}
       {!isLoading && (
-        <CatchMap catches={catches} onMapClick={handleMapClick} />
+        <CatchMap catches={catches} onMapClick={handleMapClick} focusLat={focusLat} focusLng={focusLng} />
       )}
 
       {/* FAB */}
@@ -86,5 +89,13 @@ export default function KartaPage() {
         <Plus size={24} />
       </Fab>
     </Box>
+  );
+}
+
+export default function KartaPage() {
+  return (
+    <Suspense>
+      <KartaContent />
+    </Suspense>
   );
 }

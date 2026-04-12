@@ -109,7 +109,7 @@ export default function FangstDetailPage() {
           <Button
             variant="outlined"
             startIcon={<Map size={16} />}
-            onClick={() => router.push('/karta')}
+            onClick={() => router.push(`/karta?lat=${catch_.lat}&lng=${catch_.lng}`)}
             sx={{ mt: 1, alignSelf: 'flex-start' }}
           >
             Visa på karta
