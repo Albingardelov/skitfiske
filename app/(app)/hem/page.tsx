@@ -65,15 +65,33 @@ export default function HemPage() {
   return (
     <Box sx={{ pb: 4 }}>
       <Box sx={{ px: 2, pt: 3, pb: 2 }}>
-        <Typography variant="h5" sx={{ fontWeight: 700 }}>
-          {firstName ? `Hej, ${firstName}!` : 'Välkommen!'}
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 600,
+            letterSpacing: '-0.03em',
+            lineHeight: 1.2,
+          }}
+        >
+          {firstName ? `Hej, ${firstName}` : 'Välkommen'}
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.75 }}>
+          Klubbens senaste fångster och dina siffror.
         </Typography>
       </Box>
 
       <StatsRow count={myCatches.length} heaviestKg={heaviestKg} longestCm={longestCm} />
 
-      <Box sx={{ px: 2, mb: 1 }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+      <Box sx={{ px: 2, mb: 1.5, mt: 0.5 }}>
+        <Typography
+          variant="overline"
+          sx={{
+            color: 'text.secondary',
+            fontWeight: 600,
+            letterSpacing: '0.12em',
+            lineHeight: 1.5,
+          }}
+        >
           Senaste i klubben
         </Typography>
       </Box>

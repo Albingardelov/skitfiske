@@ -45,4 +45,28 @@ describe('MessageBubble', () => {
     renderWithTheme(<MessageBubble message={baseMessage} isOwn={false} />);
     expect(screen.queryByAltText('Bifogad bild')).not.toBeInTheDocument();
   });
+
+  it('visar menyknapp för egna meddelanden när redigera/radera finns', () => {
+    renderWithTheme(
+      <MessageBubble
+        message={baseMessage}
+        isOwn={true}
+        onEdit={jest.fn()}
+        onDelete={jest.fn()}
+      />,
+    );
+    expect(screen.getByRole('button', { name: 'Meddelandealternativ' })).toBeInTheDocument();
+  });
+
+  it('visar inte menyknapp för andras meddelanden', () => {
+    renderWithTheme(
+      <MessageBubble
+        message={baseMessage}
+        isOwn={false}
+        onEdit={jest.fn()}
+        onDelete={jest.fn()}
+      />,
+    );
+    expect(screen.queryByRole('button', { name: 'Meddelandealternativ' })).not.toBeInTheDocument();
+  });
 });

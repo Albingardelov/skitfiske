@@ -8,7 +8,8 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
-import { Check, X } from 'lucide-react';
+import Tooltip from '@mui/material/Tooltip';
+import { Check, MoreVertical, X } from 'lucide-react';
 import type { Message } from '@/types/chat';
 
 interface Props {
@@ -25,11 +26,6 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
   const [editing, setEditing] = useState(false);
   const [editValue, setEditValue] = useState(message.content ?? '');
   const [lightboxOpen, setLightboxOpen] = useState(false);
-
-  function handleBubbleClick(e: React.MouseEvent<HTMLElement>) {
-    if (!isOwn || isPending || isError || !message.content) return;
-    setAnchorEl(e.currentTarget);
-  }
 
   function handleClose() {
     setAnchorEl(null);
@@ -57,6 +53,10 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
     handleClose();
   }
 
+  const canEdit = Boolean(onEdit && message.content);
+  const canDelete = Boolean(onDelete);
+  const canOpenMenu = isOwn && !isPending && !isError && (canEdit || canDelete);
+
   return (
     <Box
       sx={{
@@ -73,19 +73,27 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
         </Typography>
       )}
       <Box
-        onClick={handleBubbleClick}
         sx={{
-          maxWidth: '75%',
-          bgcolor: isOwn ? 'primary.main' : 'background.paper',
-          color: 'text.primary',
-          borderRadius: 2,
-          px: 2,
-          py: 1,
-          opacity: isPending ? 0.7 : 1,
-          border: isError ? '2px solid red' : 'none',
-          cursor: isOwn && !isPending && !isError && message.content ? 'pointer' : 'default',
+          display: 'flex',
+          flexDirection: isOwn ? 'row-reverse' : 'row',
+          alignItems: 'flex-start',
+          gap: 0.25,
+          maxWidth: '100%',
         }}
       >
+        <Box
+          sx={{
+            maxWidth: '75%',
+            bgcolor: isOwn ? 'primary.main' : 'background.paper',
+            color: isOwn ? 'primary.contrastText' : 'text.primary',
+            borderRadius: 2,
+            px: 2,
+            py: 1,
+            opacity: isPending ? 0.7 : 1,
+            border: isError ? '2px solid' : '1px solid',
+            borderColor: isError ? 'error.main' : isOwn ? 'transparent' : 'divider',
+          }}
+        >
         {message.image_url && (
           <Box
             component="img"
@@ -124,6 +132,27 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
           )
         )}
         {isPending && <CircularProgress size={12} sx={{ ml: 1 }} />}
+        </Box>
+        {canOpenMenu && (
+          <Tooltip title="Redigera eller ta bort meddelandet">
+            <IconButton
+              size="small"
+              aria-label="Meddelandealternativ"
+              onClick={(e) => setAnchorEl(e.currentTarget)}
+              sx={{
+                mt: 0.25,
+                color: isOwn ? 'primary.contrastText' : 'text.secondary',
+                opacity: isOwn ? 0.75 : 0.85,
+                '&:hover': {
+                  opacity: 1,
+                  bgcolor: isOwn ? 'rgba(18,21,26,0.12)' : 'action.hover',
+                },
+              }}
+            >
+              <MoreVertical size={18} strokeWidth={2} />
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
       <Typography variant="caption" sx={{ color: 'text.secondary', mt: 0.5 }}>
         {new Date(message.created_at).toLocaleTimeString('sv-SE', {
@@ -133,8 +162,14 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
       </Typography>
 
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem onClick={handleEditStart}>Redigera</MenuItem>
-        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>Ta bort</MenuItem>
+        {canEdit && (
+          <MenuItem onClick={handleEditStart}>Redigera</MenuItem>
+        )}
+        {canDelete && (
+          <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+            Ta bort
+          </MenuItem>
+        )}
       </Menu>
 
       {message.image_url && (

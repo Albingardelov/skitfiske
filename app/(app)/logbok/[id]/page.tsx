@@ -11,6 +11,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Modal from '@mui/material/Modal';
 import { ArrowLeft, Map } from 'lucide-react';
 import { fetchCatch } from '@/lib/supabase/catches';
+import { stickyBarSurfaceSx } from '@/lib/appChrome';
 import type { Catch } from '@/types/catch';
 
 export default function FangstDetailPage() {
@@ -59,24 +60,21 @@ export default function FangstDetailPage() {
   return (
     <Box sx={{ pb: 4 }}>
       <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-          px: 1,
-          py: 1,
-          position: 'sticky',
-          top: 0,
-          bgcolor: 'background.default',
-          zIndex: 10,
-        }}
+        sx={[
+          stickyBarSurfaceSx,
+          {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            px: 1,
+            py: 1,
+          },
+        ]}
       >
         <IconButton onClick={() => router.back()} aria-label="Tillbaka">
           <ArrowLeft size={24} />
         </IconButton>
-        <Typography variant="h6" sx={{ fontWeight: 700 }}>
-          {catch_.species}
-        </Typography>
+        <Typography variant="h6">{catch_.species}</Typography>
       </Box>
 
       {catch_.image_url && (
@@ -111,11 +109,17 @@ export default function FangstDetailPage() {
         </>
       )}
 
-      <Box sx={{ px: 2, pt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
-        <Typography variant="h5" sx={{ fontWeight: 700 }}>
+      <Box sx={{ px: 2, pt: 2, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+        <Typography
+          variant="overline"
+          sx={{ color: 'text.secondary', fontWeight: 600, letterSpacing: '0.12em' }}
+        >
+          Fångst
+        </Typography>
+        <Typography variant="h4" sx={{ letterSpacing: '-0.03em', lineHeight: 1.2 }}>
           {catch_.species}
         </Typography>
-        <Typography variant="body1">
+        <Typography variant="body1" sx={{ fontFeatureSettings: '"tnum"', fontWeight: 500 }}>
           {catch_.weight_kg} kg · {catch_.length_cm} cm
         </Typography>
         {catch_.bait && (

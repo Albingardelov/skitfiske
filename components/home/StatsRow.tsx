@@ -15,11 +15,28 @@ interface StatBoxProps {
 
 function StatBox({ label, value }: StatBoxProps) {
   return (
-    <Box sx={{ flex: 1, textAlign: 'center' }}>
-      <Typography variant="h5" sx={{ fontWeight: 700 }}>
+    <Box sx={{ flex: 1, textAlign: 'center', px: 0.5 }}>
+      <Typography
+        variant="h5"
+        sx={{
+          fontFamily: 'var(--font-serif), Georgia, serif',
+          fontWeight: 600,
+          fontFeatureSettings: '"tnum"',
+        }}
+      >
         {value}
       </Typography>
-      <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+      <Typography
+        variant="caption"
+        sx={{
+          color: 'text.secondary',
+          textTransform: 'uppercase',
+          fontWeight: 600,
+          letterSpacing: '0.08em',
+          display: 'block',
+          mt: 0.5,
+        }}
+      >
         {label}
       </Typography>
     </Box>
@@ -32,10 +49,12 @@ export default function StatsRow({ count, heaviestKg, longestCm }: Props) {
       sx={{
         display: 'flex',
         mx: 2,
-        py: 2,
+        py: 2.25,
         px: 1,
         bgcolor: 'background.paper',
         borderRadius: 2,
+        border: '1px solid',
+        borderColor: 'divider',
         mb: 2,
       }}
     >

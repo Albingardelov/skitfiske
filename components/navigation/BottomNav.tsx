@@ -21,15 +21,26 @@ export default function BottomNav() {
 
   return (
     <Paper
-      sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000 }}
-      elevation={3}
+      square
+      sx={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
+        bgcolor: 'background.paper',
+        borderTop: 1,
+        borderColor: 'divider',
+        boxShadow: '0 -4px 24px rgba(0,0,0,0.35)',
+      }}
+      elevation={0}
     >
       <BottomNavigation
         value={currentValue}
         onChange={(_, newValue: number) => {
           router.push(navItems[newValue].route);
         }}
-        sx={{ minHeight: 64, bgcolor: 'secondary.main' }}
+        sx={{ minHeight: 64, bgcolor: 'transparent' }}
       >
         {navItems.map((item) => (
           <BottomNavigationAction
@@ -37,8 +48,8 @@ export default function BottomNav() {
             label={item.label}
             icon={item.icon}
             sx={{
-              color: 'rgba(255,255,255,0.6)',
-              '&.Mui-selected': { color: 'primary.main' },
+              color: 'text.secondary',
+              '&.Mui-selected': { color: 'primary.light' },
               minWidth: 0,
             }}
           />

@@ -1,5 +1,6 @@
 // components/map/CatchMarkerLayer.tsx
-import { Marker, Popup, useMapEvents } from 'react-leaflet';
+import { CircleMarker, Popup, useMapEvents } from 'react-leaflet';
+import { mapTokens } from '@/lib/mapTokens';
 import type { Catch } from '@/types/catch';
 
 interface Props {
@@ -19,33 +20,44 @@ export default function CatchMarkerLayer({ catches, onMapClick }: Props) {
   return (
     <>
       {withCoords.map((c) => (
-        <Marker key={c.id} position={[c.lat!, c.lng!]}>
+        <CircleMarker
+          key={c.id}
+          center={[c.lat!, c.lng!]}
+          radius={9}
+          pathOptions={{
+            color: mapTokens.accent,
+            fillColor: mapTokens.dotFill,
+            fillOpacity: 1,
+            weight: 2,
+          }}
+        >
           <Popup>
-            <strong>{c.species}</strong>
-            <br />
-            {c.weight_kg} kg · {c.length_cm} cm
+            <p className="skitfiske-popup-title">{c.species}</p>
+            <p className="skitfiske-popup-meta">
+              {c.weight_kg} kg · {c.length_cm} cm
+            </p>
             {c.location_text && (
-              <>
-                <br />
-                {c.location_text}
-              </>
+              <p className="skitfiske-popup-caption">{c.location_text}</p>
             )}
-            <br />
-            {new Date(c.caught_at).toLocaleString('sv-SE', {
-              day: 'numeric',
-              month: 'short',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
+            <p className="skitfiske-popup-caption">
+              {new Date(c.caught_at).toLocaleString('sv-SE', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </p>
             {c.image_url && (
-              <>
-                <br />
-                <img src={c.image_url} alt={c.species} style={{ width: 120, marginTop: 4 }} />
-              </>
+              // eslint-disable-next-line @next/next/no-img-element -- Leaflet-popup, extern URL
+              <img
+                className="skitfiske-popup-img"
+                src={c.image_url}
+                alt={c.species}
+              />
             )}
           </Popup>
-        </Marker>
+        </CircleMarker>
       ))}
     </>
   );

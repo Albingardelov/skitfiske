@@ -26,7 +26,8 @@ function renderWithTheme(ui: React.ReactElement) {
 describe('CatchList', () => {
   it('visar tom-state när listan är tom', () => {
     renderWithTheme(<CatchList catches={[]} isLoading={false} />);
-    expect(screen.getByText('Inga fångster registrerade än.')).toBeInTheDocument();
+    expect(screen.getByText(/Inga fångster registrerade än/)).toBeInTheDocument();
+    expect(screen.getByText('Tomt just nu')).toBeInTheDocument();
   });
 
   it('renderar ett kort per fångst', () => {

@@ -2,18 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, CircleMarker, useMap } from 'react-leaflet';
-import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import CatchMarkerLayer from './CatchMarkerLayer';
+import { mapTokens } from '@/lib/mapTokens';
 import type { Catch } from '@/types/catch';
-
-// Fix Leaflet default icon broken by webpack
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-});
 
 function FlyTo({ lat, lng }: { lat: number; lng: number }) {
   const map = useMap();
@@ -40,28 +32,47 @@ export default function CatchMap({ catches, onMapClick, focusLat, focusLng }: Pr
         setUserPos([pos.coords.latitude, pos.coords.longitude]);
       },
       () => {
-        // Permission denied or error — userPos stays null, CircleMarker not shown
-      }
+        // Permission denied — ingen användarmarkör
+      },
     );
   }, []);
 
   return (
     <MapContainer
+      className="skitfiske-map"
       center={[62.0, 15.0]}
       zoom={5}
-      style={{ height: '100%', width: '100%' }}
+      style={{ height: '100%', width: '100%', background: '#0c0f14' }}
+      zoomControl
     >
       <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
       />
       <CatchMarkerLayer catches={catches} onMapClick={onMapClick} />
       {userPos && (
-        <CircleMarker
-          center={userPos}
-          radius={8}
-          pathOptions={{ color: '#1976d2', fillColor: '#1976d2', fillOpacity: 0.8 }}
-        />
+        <>
+          <CircleMarker
+            center={userPos}
+            radius={14}
+            pathOptions={{
+              color: mapTokens.accentLight,
+              fillColor: mapTokens.userRing,
+              fillOpacity: 0.2,
+              weight: 1,
+            }}
+          />
+          <CircleMarker
+            center={userPos}
+            radius={6}
+            pathOptions={{
+              color: mapTokens.accent,
+              fillColor: mapTokens.accent,
+              fillOpacity: 0.9,
+              weight: 2,
+            }}
+          />
+        </>
       )}
       {focusLat !== undefined && focusLng !== undefined && (
         <FlyTo lat={focusLat} lng={focusLng} />

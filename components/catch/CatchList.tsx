@@ -20,8 +20,26 @@ export default function CatchList({ catches, isLoading }: Props) {
 
   if (catches.length === 0) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', pt: 4 }}>
-        <Typography color="text.secondary">Inga fångster registrerade än.</Typography>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          pt: 6,
+          px: 3,
+          textAlign: 'center',
+        }}
+      >
+        <Typography
+          variant="overline"
+          sx={{ color: 'text.secondary', fontWeight: 600, letterSpacing: '0.12em', mb: 1 }}
+        >
+          Tomt just nu
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Inga fångster registrerade än. Lägg till en med plusknappen.
+        </Typography>
       </Box>
     );
   }

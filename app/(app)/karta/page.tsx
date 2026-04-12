@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Fab from '@mui/material/Fab';
@@ -23,27 +24,34 @@ function KartaContent() {
   const [catches, setCatches] = useState<Catch[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
+  const [authDone, setAuthDone] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser()
+    supabase.auth
+      .getUser()
       .then(({ data }) => {
         setUserId(data.user?.id ?? null);
       })
       .catch(() => {
         setUserId(null);
-      });
+      })
+      .finally(() => setAuthDone(true));
   }, []);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!authDone) return;
+    if (!userId) {
+      setCatches([]);
+      return;
+    }
     setIsLoading(true);
     const load = filter === 'mine' ? fetchMyCatches(userId) : fetchAllCatches();
     load
       .then(setCatches)
       .catch(() => setCatches([]))
       .finally(() => setIsLoading(false));
-  }, [filter, userId]);
+  }, [authDone, filter, userId]);
 
   function handleMapClick(lat: number, lng: number) {
     router.push(`/logbok/ny?lat=${lat}&lng=${lng}`);
@@ -59,15 +67,15 @@ function KartaContent() {
       <ToggleButtonGroup
         value={filter}
         exclusive
-        onChange={(_, val) => { if (val) setFilter(val); }}
+        onChange={(_, val) => {
+          if (val) setFilter(val);
+        }}
         size="small"
         sx={{
           position: 'absolute',
-          top: 8,
-          right: 8,
+          top: 10,
+          right: 10,
           zIndex: 1000,
-          bgcolor: 'background.paper',
-          borderRadius: 1,
         }}
       >
         <ToggleButton value="mine">Mina</ToggleButton>
@@ -75,8 +83,23 @@ function KartaContent() {
       </ToggleButtonGroup>
 
       {/* Map */}
-      {!isLoading && (
+      {authDone && !isLoading && (
         <CatchMap catches={catches} onMapClick={handleMapClick} focusLat={focusLat} focusLng={focusLng} />
+      )}
+      {(!authDone || isLoading) && (
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            bgcolor: 'background.default',
+            zIndex: 1,
+          }}
+        >
+          <CircularProgress size={36} sx={{ color: 'primary.light' }} />
+        </Box>
       )}
 
       {/* FAB */}

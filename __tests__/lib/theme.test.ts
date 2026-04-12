@@ -1,28 +1,28 @@
 import theme from '@/lib/theme';
 
 describe('MUI theme', () => {
-  it('has Safety Orange as primary color', () => {
-    expect(theme.palette.primary.main).toBe('#FB8500');
+  it('has muted brass as primary accent', () => {
+    expect(theme.palette.primary.main).toBe('#c4a667');
   });
 
-  it('has Deep Forest Green as secondary color', () => {
-    expect(theme.palette.secondary.main).toBe('#1B4332');
+  it('has deep slate secondary for surfaces', () => {
+    expect(theme.palette.secondary.main).toBe('#1e2a2e');
   });
 
-  it('has Lake Blue as background default', () => {
-    expect(theme.palette.background.default).toBe('#003566');
+  it('has charcoal background default', () => {
+    expect(theme.palette.background.default).toBe('#0c0f14');
   });
 
-  it('has white as primary text color', () => {
-    expect(theme.palette.text.primary).toBe('#FFFFFF');
+  it('has soft off-white primary text', () => {
+    expect(theme.palette.text.primary).toBe('#e6e8ea');
   });
 
-  it('has borderRadius 12', () => {
-    expect(theme.shape.borderRadius).toBe(12);
+  it('has tighter border radius', () => {
+    expect(theme.shape.borderRadius).toBe(6);
   });
 
-  it('Button has minHeight 48', () => {
+  it('Button has restrained minHeight', () => {
     const buttonRoot = theme.components?.MuiButton?.styleOverrides?.root as Record<string, unknown>;
-    expect(buttonRoot.minHeight).toBe(48);
+    expect(buttonRoot.minHeight).toBe(44);
   });
 });

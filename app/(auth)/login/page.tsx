@@ -46,17 +46,23 @@ export default function LoginPage() {
         alignItems: 'center',
         justifyContent: 'center',
         px: 3,
-        bgcolor: 'background.default',
+        bgcolor: 'transparent',
       }}
     >
       <Image
         src="/logo.svg"
         alt="Skitfiske"
-        width={200}
-        height={80}
-        style={{ marginBottom: 16 }}
+        width={168}
+        height={68}
+        style={{ marginBottom: 12 }}
       />
-      <Typography variant="body2" sx={{ mb: 4, color: 'text.secondary' }}>
+      <Typography
+        variant="h4"
+        sx={{ mb: 1, textAlign: 'center', letterSpacing: '-0.03em' }}
+      >
+        Logga in
+      </Typography>
+      <Typography variant="body2" sx={{ mb: 3, color: 'text.secondary', textAlign: 'center' }}>
         Fiskeklubbens app
       </Typography>
 

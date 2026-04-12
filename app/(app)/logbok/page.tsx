@@ -11,6 +11,7 @@ import { Plus } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { fetchMyCatches, fetchAllCatches } from '@/lib/supabase/catches';
 import CatchList from '@/components/catch/CatchList';
+import { stickyBarSurfaceSx } from '@/lib/appChrome';
 import type { Catch } from '@/types/catch';
 
 export default function LogbokPage() {
@@ -39,17 +40,8 @@ export default function LogbokPage() {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px)' }}>
-      <Box sx={{ position: 'sticky', top: 0, zIndex: 10, bgcolor: 'background.paper' }}>
-        <Tabs
-          value={tab}
-          onChange={(_, v: number) => setTab(v)}
-          variant="fullWidth"
-          sx={{
-            '& .MuiTab-root': { color: 'text.secondary' },
-            '& .Mui-selected': { color: 'primary.main' },
-            '& .MuiTabs-indicator': { bgcolor: 'primary.main' },
-          }}
-        >
+      <Box sx={stickyBarSurfaceSx}>
+        <Tabs value={tab} onChange={(_, v: number) => setTab(v)} variant="fullWidth">
           <Tab label="Mina fångster" />
           <Tab label="Alla fångster" />
         </Tabs>

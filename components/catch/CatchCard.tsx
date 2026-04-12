@@ -20,11 +20,11 @@ export default function CatchCard({ catch: c }: Props) {
   });
 
   return (
-    <Card sx={{ mb: 1.5, mx: 2, bgcolor: 'background.paper' }}>
+    <Card sx={{ mb: 1.5, mx: 2, bgcolor: 'background.paper', overflow: 'hidden' }}>
       <CardActionArea component={NextLink} href={`/logbok/${c.id}`}>
       <CardContent sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
         <Box sx={{ flex: 1 }}>
-          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
             {c.species}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
@@ -44,7 +44,14 @@ export default function CatchCard({ catch: c }: Props) {
             component="img"
             src={c.image_url}
             alt="Fångstbild"
-            sx={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 1 }}
+            sx={{
+              width: 80,
+              height: 80,
+              objectFit: 'cover',
+              borderRadius: 1,
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
           />
         )}
       </CardContent>

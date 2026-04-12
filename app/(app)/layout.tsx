@@ -4,19 +4,21 @@ import BottomNav from '@/components/navigation/BottomNav';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', pb: '64px' }}>
+    <Box sx={{ minHeight: '100vh', bgcolor: 'transparent', pb: '64px' }}>
       <Box
+        component="header"
         sx={{
           display: 'flex',
           alignItems: 'center',
           px: 2,
-          py: 1,
-          bgcolor: 'background.paper',
+          py: 0.75,
+          bgcolor: 'rgba(19, 24, 32, 0.72)',
+          backdropFilter: 'blur(12px)',
           borderBottom: '1px solid',
           borderColor: 'divider',
         }}
       >
-        <Image src="/logo.svg" alt="Skitfiske" width={64} height={64} />
+        <Image src="/logo.svg" alt="Skitfiske" width={48} height={48} />
       </Box>
       {children}
       <BottomNav />

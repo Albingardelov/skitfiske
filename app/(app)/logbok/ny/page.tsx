@@ -12,6 +12,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { ArrowLeft, MapPin, Camera } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { insertCatch, uploadCatchImage } from '@/lib/supabase/catches';
+import { stickyBarSurfaceSx } from '@/lib/appChrome';
 
 function getLocalDatetimeString() {
   const now = new Date();
@@ -134,24 +135,21 @@ function NyFangstForm() {
   return (
     <Box sx={{ pb: 4 }}>
       <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-          px: 1,
-          py: 1,
-          position: 'sticky',
-          top: 0,
-          bgcolor: 'background.default',
-          zIndex: 10,
-        }}
+        sx={[
+          stickyBarSurfaceSx,
+          {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            px: 1,
+            py: 1,
+          },
+        ]}
       >
         <IconButton onClick={() => router.push('/logbok')} aria-label="Tillbaka">
           <ArrowLeft size={24} />
         </IconButton>
-        <Typography variant="h6" sx={{ fontWeight: 700 }}>
-          Registrera fångst
-        </Typography>
+        <Typography variant="h6">Registrera fångst</Typography>
       </Box>
 
       <Box sx={{ px: 2, display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
@@ -238,7 +236,14 @@ function NyFangstForm() {
               component="img"
               src={imagePreview}
               alt="Förhandsvisning"
-              sx={{ width: '100%', maxHeight: 200, objectFit: 'cover', borderRadius: 2 }}
+              sx={{
+                width: '100%',
+                maxHeight: 200,
+                objectFit: 'cover',
+                borderRadius: 2,
+                border: '1px solid',
+                borderColor: 'divider',
+              }}
             />
           )}
         </Box>

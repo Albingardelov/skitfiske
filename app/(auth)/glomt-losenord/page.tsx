@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 import Link from '@mui/material/Link';
 import NextLink from 'next/link';
+import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 
 export default function ForgotPasswordPage() {
@@ -45,7 +46,7 @@ export default function ForgotPasswordPage() {
           alignItems: 'center',
           justifyContent: 'center',
           px: 3,
-          bgcolor: 'background.default',
+          bgcolor: 'transparent',
         }}
       >
         <Alert severity="success" sx={{ maxWidth: 400, width: '100%' }}>
@@ -64,10 +65,17 @@ export default function ForgotPasswordPage() {
         alignItems: 'center',
         justifyContent: 'center',
         px: 3,
-        bgcolor: 'background.default',
+        bgcolor: 'transparent',
       }}
     >
-      <Typography variant="h4" sx={{ mb: 2, fontWeight: 700 }}>
+      <Image
+        src="/logo.svg"
+        alt="Skitfiske"
+        width={168}
+        height={68}
+        style={{ marginBottom: 12 }}
+      />
+      <Typography variant="h4" sx={{ mb: 1.5, textAlign: 'center', letterSpacing: '-0.03em' }}>
         Glömt lösenord?
       </Typography>
       <Typography

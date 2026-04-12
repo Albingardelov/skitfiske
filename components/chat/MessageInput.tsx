@@ -49,8 +49,11 @@ export default function MessageInput({ onSend, disabled }: Props) {
         alignItems: 'flex-end',
         gap: 1,
         p: 1,
-        borderTop: '1px solid rgba(255,255,255,0.1)',
-        bgcolor: 'background.paper',
+        borderTop: '1px solid',
+        borderColor: 'divider',
+        bgcolor: 'rgba(19, 24, 32, 0.92)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
         pb: 'calc(8px + env(safe-area-inset-bottom))',
       }}
     >

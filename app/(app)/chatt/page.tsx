@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
+import Alert from '@mui/material/Alert';
 import { createClient } from '@/lib/supabase/client';
 import { useChat } from '@/hooks/useChat';
 import ChatTabs from '@/components/chat/ChatTabs';
@@ -48,9 +49,12 @@ export default function ChattPage() {
           justifyContent: 'center',
           alignItems: 'center',
           height: 'calc(100vh - 64px)',
+          px: 2,
         }}
       >
-        <Typography color="error">Kunde inte ladda chatten. Försök igen.</Typography>
+        <Alert severity="error" sx={{ width: '100%', maxWidth: 400 }}>
+          Kunde inte ladda chatten. Försök igen.
+        </Alert>
       </Box>
     );
   }
@@ -78,9 +82,9 @@ export default function ChattPage() {
         onChannelChange={setActiveChannelId}
       />
       {error && (
-        <Typography sx={{ px: 2, py: 1, color: 'error.main', fontSize: '0.875rem' }}>
+        <Alert severity="error" sx={{ mx: 2, mt: 1, borderRadius: 2 }}>
           {error}
-        </Typography>
+        </Alert>
       )}
       <MessageList messages={messages} currentUserId={userId} onDelete={removeMessage} onEdit={editMessage} />
       <MessageInput onSend={sendMessage} disabled={isLoading || !userId} />
