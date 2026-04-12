@@ -73,9 +73,9 @@ const theme = createTheme({
           borderRadius: 6,
           boxShadow: 'none',
           '&:hover': { boxShadow: 'none' },
-        },
-        containedPrimary: {
-          '&:hover': { backgroundColor: '#d4bc85' },
+          '&.MuiButton-containedPrimary:hover': {
+            backgroundColor: '#d4bc85',
+          },
         },
       },
     },
@@ -184,9 +184,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           boxShadow: '0 6px 24px rgba(0,0,0,0.4)',
-        },
-        primary: {
-          '&:hover': {
+          '&.MuiFab-primary:hover': {
             backgroundColor: '#d4bc85',
           },
         },
@@ -209,12 +207,12 @@ const theme = createTheme({
           borderRadius: 8,
           border: '1px solid',
           backgroundImage: 'none',
-        },
-        standardError: {
-          borderColor: 'rgba(239, 83, 80, 0.35)',
-        },
-        standardSuccess: {
-          borderColor: 'rgba(102, 187, 106, 0.35)',
+          '&.MuiAlert-standardError': {
+            borderColor: 'rgba(239, 83, 80, 0.35)',
+          },
+          '&.MuiAlert-standardSuccess': {
+            borderColor: 'rgba(102, 187, 106, 0.35)',
+          },
         },
       },
     },
