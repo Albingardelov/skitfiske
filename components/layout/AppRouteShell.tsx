@@ -20,10 +20,9 @@ export default function AppRouteShell({ children }: { children: React.ReactNode 
     <Box
       sx={{
         height: '100dvh',
-        overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        bgcolor: 'transparent',
+        bgcolor: 'background.default',
         pb: bottomInset,
       }}
     >
