@@ -17,6 +17,7 @@ import SeasonPerformanceSection from '@/components/home/SeasonPerformanceSection
 import TackleBoxInsightsCard from '@/components/home/TackleBoxInsightsCard';
 import UpcomingHatchCard from '@/components/home/UpcomingHatchCard';
 import HomeFab from '@/components/home/HomeFab';
+import HomeInsightCard from '@/components/home/HomeInsightCard';
 import CatchCard from '@/components/catch/CatchCard';
 import { expedition } from '@/lib/theme/expeditionTokens';
 import type { Catch } from '@/types/catch';
@@ -127,6 +128,7 @@ export default function HemPage() {
     >
       <HemScreenHeader />
       <HemHero firstName={firstName} />
+      <HomeInsightCard catches={myCatches} />
 
       <SeasonPerformanceSection catches={myCatches} />
 
