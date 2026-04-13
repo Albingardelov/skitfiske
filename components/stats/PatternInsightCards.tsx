@@ -39,7 +39,7 @@ export default function PatternInsightCards({ insights }: Props) {
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           {insights.map((insight) => (
             <Box
-              key={insight.text}
+              key={`${insight.species}-${insight.text}`}
               sx={{
                 display: 'flex',
                 alignItems: 'flex-start',

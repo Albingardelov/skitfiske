@@ -204,9 +204,9 @@ export default function ClubLeaderboard({ data }: Props) {
         <>
           {sectionLabel('Senaste stora (30 dagar)')}
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            {data.recentBig.map((c) => (
+            {data.recentBig.map((c, i) => (
               <Box
-                key={`${c.caughtAt}-${c.fullName}`}
+                key={`${c.caughtAt}-${c.fullName}-${i}`}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
