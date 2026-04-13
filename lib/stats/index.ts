@@ -71,6 +71,8 @@ const MONTH_NAMES = [
   'juli', 'augusti', 'september', 'oktober', 'november', 'december',
 ];
 
+const INSIGHT_THRESHOLD = 5;
+
 function getTimeBlock(isoDate: string): TimeBlock {
   const hour = new Date(isoDate).getUTCHours();
   if (hour >= 5 && hour < 10) return 'Morgon';
@@ -134,7 +136,6 @@ export function computePersonalStats(catches: Catch[]): PersonalStats {
 // ─── computePatternInsights ────────────────────────────────────────────────
 
 export function computePatternInsights(catches: Catch[]): PatternInsight[] {
-  const THRESHOLD = 5;
   const insights: PatternInsight[] = [];
 
   const bySpecies = new Map<string, Catch[]>();
@@ -145,7 +146,7 @@ export function computePatternInsights(catches: Catch[]): PatternInsight[] {
   }
 
   const qualified = [...bySpecies.entries()]
-    .filter(([, cs]) => cs.length >= THRESHOLD)
+    .filter(([, cs]) => cs.length >= INSIGHT_THRESHOLD)
     .sort((a, b) => b[1].length - a[1].length);
 
   for (const [species, cs] of qualified) {
@@ -176,8 +177,8 @@ export function computePatternInsights(catches: Catch[]): PatternInsight[] {
       const sorted = [...baitCounts.entries()].sort((a, b) => b[1] - a[1]);
       const [topBait, topCount] = sorted[0];
       const secondCount = sorted[1][1];
-      const ratio = Math.round(topCount / secondCount);
-      if (ratio >= 2) {
+      if (topCount >= 2 * secondCount) {
+        const ratio = Math.floor(topCount / secondCount);
         insights.push({
           species,
           text: `${topBait} ger dig ${ratio}× fler ${species.toLowerCase()} än andra beten`,
@@ -274,7 +275,6 @@ export function computeLeaderboard(catches: Catch[], currentUserId: string): Lea
 // ─── computeHomeInsight ────────────────────────────────────────────────────
 
 export function computeHomeInsight(catches: Catch[], now: Date): HomeInsight | null {
-  const THRESHOLD = 5;
   const currentHour = now.getUTCHours();
   const currentMonth = now.getUTCMonth();
 
@@ -301,7 +301,7 @@ export function computeHomeInsight(catches: Catch[], now: Date): HomeInsight | n
   }
 
   const topEntry = [...bySpecies.entries()]
-    .filter(([, cs]) => cs.length >= THRESHOLD)
+    .filter(([, cs]) => cs.length >= INSIGHT_THRESHOLD)
     .sort((a, b) => b[1].length - a[1].length)[0];
 
   if (!topEntry) return null;
@@ -319,11 +319,14 @@ export function computeHomeInsight(catches: Catch[], now: Date): HomeInsight | n
 
   const monthCounts = new Map<number, number>();
   for (const c of cs) {
-    const m = new Date(c.caught_at).getMonth();
+    const m = new Date(c.caught_at).getUTCMonth();
     monthCounts.set(m, (monthCounts.get(m) ?? 0) + 1);
   }
   const bestMonth = topKey(monthCounts);
-  const monthMatches = bestMonth !== null && Math.abs(bestMonth - currentMonth) <= 1;
+  const monthMatches = bestMonth !== null && (
+    Math.abs(bestMonth - currentMonth) <= 1 ||
+    Math.abs(bestMonth - currentMonth) >= 11
+  );
   const monthLabel = bestMonth !== null ? MONTH_NAMES[bestMonth] : null;
 
   if (!timeMatches && !monthMatches) return null;
