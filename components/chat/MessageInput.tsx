@@ -53,6 +53,9 @@ export default function MessageInput({ onSend, disabled }: Props) {
     <>
       <Box
         sx={{
+          position: 'sticky',
+          bottom: 0,
+          zIndex: 5,
           flexShrink: 0,
           px: 2,
           pt: 1.25,
