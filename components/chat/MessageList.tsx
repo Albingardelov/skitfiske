@@ -18,6 +18,13 @@ export default function MessageList({ messages, currentUserId, onDelete, onEdit 
   const containerRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  // DEBUG — ta bort efter felsökning
+  if (typeof window !== 'undefined' && messages.length > 0) {
+    console.log('[MessageList] currentUserId:', JSON.stringify(currentUserId));
+    console.log('[MessageList] messages[0].user_id:', JSON.stringify(messages[0].user_id));
+    console.log('[MessageList] match:', messages[0].user_id === currentUserId);
+  }
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
