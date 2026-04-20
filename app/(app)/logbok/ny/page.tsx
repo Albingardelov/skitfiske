@@ -35,7 +35,7 @@ function NyFangstForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [species, setSpecies] = useState('');
-  const [weightKg, setWeightKg] = useState('');
+  const [weightG, setWeightG] = useState('');
   const [lengthCm, setLengthCm] = useState('');
   const [caughtAt, setCaughtAt] = useState(getLocalDatetimeString());
   const [bait, setBait] = useState('');
@@ -91,12 +91,12 @@ function NyFangstForm() {
     return () => controller.abort();
   }, [lat, lng]);
 
-  const parsedWeight = parseFloat(weightKg);
+  const parsedGrams = parseFloat(weightG);
   const parsedLength = parseFloat(lengthCm);
   const canSave =
     activeClub != null &&
     species.trim().length > 0 &&
-    !isNaN(parsedWeight) && parsedWeight > 0 &&
+    !isNaN(parsedGrams) && parsedGrams > 0 &&
     !isNaN(parsedLength) && parsedLength > 0 &&
     caughtAt.length > 0 &&
     !isSaving;
@@ -155,7 +155,7 @@ function NyFangstForm() {
         user_id: userData.user.id,
         full_name: userData.user.user_metadata?.full_name ?? 'Anonym',
         species: species.trim(),
-        weight_kg: parsedWeight,
+        weight_kg: parsedGrams / 1000,
         length_cm: parsedLength,
         bait: bait.trim() || null,
         location_text: locationText.trim() || null,
@@ -241,11 +241,11 @@ function NyFangstForm() {
           sx={formFieldReadableSx}
         />
         <TextField
-          label="Vikt (kg) *"
+          label="Vikt (g) *"
           type="number"
-          slotProps={{ htmlInput: { step: '0.001', min: '0' } }}
-          value={weightKg}
-          onChange={(e) => setWeightKg(e.target.value)}
+          slotProps={{ htmlInput: { step: '1', min: '0' } }}
+          value={weightG}
+          onChange={(e) => setWeightG(e.target.value)}
           fullWidth
           sx={formFieldReadableSx}
         />
