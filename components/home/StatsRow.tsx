@@ -2,6 +2,7 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { hemTheme } from '@/lib/hemTheme';
+import { formatWeightG } from '@/lib/formatWeight';
 
 interface Props {
   count: number;
@@ -71,7 +72,7 @@ export default function StatsRow({ count, heaviestKg, longestCm, variant = 'defa
       }}
     >
       <StatBox label="Fångster" value={String(count)} variant={variant} />
-      <StatBox label="Tyngsta" value={heaviestKg !== null ? `${heaviestKg} kg` : '–'} variant={variant} />
+      <StatBox label="Tyngsta" value={heaviestKg !== null ? formatWeightG(heaviestKg) : '–'} variant={variant} />
       <StatBox label="Längsta" value={longestCm !== null ? `${longestCm} cm` : '–'} variant={variant} />
     </Box>
   );

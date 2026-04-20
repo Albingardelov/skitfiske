@@ -13,9 +13,9 @@ describe('StatsRow', () => {
     expect(screen.getByText('5')).toBeInTheDocument();
   });
 
-  it('renderar tyngsta fisk i kg', () => {
+  it('renderar tyngsta fisk i gram', () => {
     renderWithTheme(<StatsRow count={5} heaviestKg={2.4} longestCm={58} />);
-    expect(screen.getByText('2.4 kg')).toBeInTheDocument();
+    expect(screen.getByText(/2[\s\u202F]*400\s*g/)).toBeInTheDocument();
   });
 
   it('renderar längsta fisk i cm', () => {
