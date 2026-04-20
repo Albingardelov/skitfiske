@@ -131,7 +131,7 @@ export default function ChattPage() {
     );
   }
 
-  if (!isReady || channelsLoading) {
+  if (!isReady || channelsLoading || !userId) {
     return (
       <Box
         sx={{
