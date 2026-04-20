@@ -23,8 +23,8 @@ function formatLogbookDate(iso: string) {
   return s.replace(/\./g, '').toUpperCase();
 }
 
-function formatWeightSv(kg: number) {
-  return `${new Intl.NumberFormat('sv-SE', { minimumFractionDigits: 0, maximumFractionDigits: 1 }).format(kg)} kg`;
+function formatWeightG(kg: number) {
+  return `${new Intl.NumberFormat('sv-SE', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(kg * 1000)} g`;
 }
 
 function LogbookCatchCard({ c }: { c: Catch }) {
@@ -107,7 +107,7 @@ function LogbookCatchCard({ c }: { c: Catch }) {
                 lineHeight: 1.2,
               }}
             >
-              {formatWeightSv(c.weight_kg)}
+              {formatWeightG(c.weight_kg)}
             </Typography>
           </Box>
         </Box>
@@ -303,7 +303,7 @@ export default function CatchCard({ catch: c, variant = 'default' }: Props) {
               mb: 0.5,
             }}
           >
-            {c.weight_kg} kg · {c.length_cm} cm
+            {c.weight_kg * 1000} g · {c.length_cm} cm
           </Typography>
           {c.location_text && (
             <Typography variant="body2" sx={{ color: light ? hemTheme.muted : 'text.secondary', mb: 0.5 }}>

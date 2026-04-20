@@ -35,7 +35,8 @@ describe('CatchCard', () => {
 
   it('renderar vikt och längd', () => {
     renderWithTheme(<CatchCard catch={baseCatch} />);
-    expect(screen.getByText(/2\.4.*kg/)).toBeInTheDocument();
+    // weight_kg: 2.4 → 2400 g, sv-SE formaterar med tunt mellanslag: "2 400 g"
+    expect(screen.getByText(/2[\s\u202F]*400.*g/)).toBeInTheDocument();
     expect(screen.getByText(/58.*cm/)).toBeInTheDocument();
   });
 
@@ -72,8 +73,8 @@ describe('CatchCard', () => {
     expect(screen.getByText('Esox lucius')).toBeInTheDocument();
   });
 
-  it('logbook-variant: visar vikt i pill med svenskt format', () => {
+  it('logbook-variant: visar vikt i pill med gram', () => {
     renderWithTheme(<CatchCard catch={baseCatch} variant="logbook" />);
-    expect(screen.getByText(/2,4\s*kg/)).toBeInTheDocument();
+    expect(screen.getByText(/2[\s\u202F]*400\s*g/)).toBeInTheDocument();
   });
 });
