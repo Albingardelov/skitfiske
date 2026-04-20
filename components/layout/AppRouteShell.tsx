@@ -15,6 +15,8 @@ export default function AppRouteShell({ children }: { children: React.ReactNode 
     pathname !== '/chatt' &&
     pathname !== '/klubb' &&
     !pathname.startsWith('/klubb/');
+  const padForBottomNav = pathname !== '/chatt';
+  const shellContentScrolls = pathname !== '/chatt';
 
   return (
     <Box
@@ -24,7 +26,7 @@ export default function AppRouteShell({ children }: { children: React.ReactNode 
         display: 'flex',
         flexDirection: 'column',
         bgcolor: 'background.default',
-        pb: bottomInset,
+        pb: padForBottomNav ? bottomInset : 0,
       }}
     >
       {showAppHeader && <AppHeader />}
@@ -34,7 +36,7 @@ export default function AppRouteShell({ children }: { children: React.ReactNode 
           minHeight: 0,
           display: 'flex',
           flexDirection: 'column',
-          overflowY: 'auto',
+          overflowY: shellContentScrolls ? 'auto' : 'hidden',
         }}
       >
         {children}

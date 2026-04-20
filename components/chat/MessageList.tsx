@@ -51,48 +51,50 @@ export default function MessageList({ messages, currentUserId, onDelete, onEdit 
         },
       }}
     >
-      {messages.map((message, index) => {
-        const showDay =
-          index === 0 || !isSameCalendarDay(message.created_at, messages[index - 1].created_at);
-        return (
-          <Fragment key={message.id}>
-            {showDay && (
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 1.5,
-                  px: 3,
-                  py: 2,
-                }}
-              >
-                <Box sx={{ flex: 1, height: '1px', bgcolor: 'divider', opacity: 0.6 }} />
-                <Typography
+      <Box sx={{ width: '100%', maxWidth: 720, mx: 'auto' }}>
+        {messages.map((message, index) => {
+          const showDay =
+            index === 0 || !isSameCalendarDay(message.created_at, messages[index - 1].created_at);
+          return (
+            <Fragment key={message.id}>
+              {showDay && (
+                <Box
                   sx={{
-                    fontFamily: 'var(--font-work), var(--font-sans), sans-serif',
-                    fontSize: '0.625rem',
-                    fontWeight: 700,
-                    letterSpacing: '0.18em',
-                    textTransform: 'uppercase',
-                    color: 'text.disabled',
-                    px: 0.5,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1.5,
+                    px: 3,
+                    py: 2,
                   }}
                 >
-                  {dayDividerLabel(message.created_at)}
-                </Typography>
-                <Box sx={{ flex: 1, height: '1px', bgcolor: 'divider', opacity: 0.6 }} />
-              </Box>
-            )}
-            <MessageBubble
-              message={message}
-              isOwn={message.user_id === currentUserId}
-              onDelete={onDelete}
-              onEdit={onEdit}
-            />
-          </Fragment>
-        );
-      })}
-      <div ref={bottomRef} />
+                  <Box sx={{ flex: 1, height: '1px', bgcolor: 'divider', opacity: 0.6 }} />
+                  <Typography
+                    sx={{
+                      fontFamily: 'var(--font-work), var(--font-sans), sans-serif',
+                      fontSize: '0.625rem',
+                      fontWeight: 700,
+                      letterSpacing: '0.18em',
+                      textTransform: 'uppercase',
+                      color: 'text.disabled',
+                      px: 0.5,
+                    }}
+                  >
+                    {dayDividerLabel(message.created_at)}
+                  </Typography>
+                  <Box sx={{ flex: 1, height: '1px', bgcolor: 'divider', opacity: 0.6 }} />
+                </Box>
+              )}
+              <MessageBubble
+                message={message}
+                isOwn={message.user_id === currentUserId}
+                onDelete={onDelete}
+                onEdit={onEdit}
+              />
+            </Fragment>
+          );
+        })}
+        <div ref={bottomRef} />
+      </Box>
     </Box>
   );
 }
