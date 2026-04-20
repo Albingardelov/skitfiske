@@ -140,10 +140,10 @@ describe('allSpeciesNames', () => {
 
   it('sorterar alfabetiskt (sv-SE)', () => {
     const result = allSpeciesNames([makeClubSpecies('Ål')]);
-    // Ål ska sorteras efter Ö i sv-SE
+    // Å kommer före Ö i svenska alfabetet (Å, Ä, Ö)
     const indexAl = result.indexOf('Ål');
     const indexOs = result.indexOf('Öring');
-    expect(indexAl).toBeGreaterThan(indexOs);
+    expect(indexAl).toBeLessThan(indexOs);
   });
 });
 ```
