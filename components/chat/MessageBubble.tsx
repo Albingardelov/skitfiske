@@ -198,11 +198,11 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
               onClick={(e) => setAnchorEl(e.currentTarget)}
               sx={{
                 mb: 0.25,
-                color: isOwn && isLight ? 'rgba(255,255,255,0.85)' : 'text.secondary',
-                opacity: 0.9,
+                color: 'text.secondary',
+                opacity: 0.7,
                 '&:hover': {
                   opacity: 1,
-                  bgcolor: isOwn && isLight ? 'rgba(255,255,255,0.12)' : 'action.hover',
+                  bgcolor: 'action.hover',
                 },
               }}
             >
