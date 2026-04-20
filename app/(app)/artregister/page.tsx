@@ -15,7 +15,6 @@ import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
 import { ArrowLeft, Trash2 } from 'lucide-react';
 import { useClub } from '@/contexts/ClubContext';
-import { createClient } from '@/lib/supabase/client';
 import { fetchClubSpecies, insertClubSpecies, deleteClubSpecies } from '@/lib/supabase/species';
 import { GLOBAL_SPECIES } from '@/lib/speciesLatin';
 import { stickyBarSurfaceSx, formFieldReadableSx } from '@/lib/appChrome';
@@ -23,19 +22,12 @@ import type { ClubSpecies } from '@/types/species';
 
 export default function ArtregisterPage() {
   const router = useRouter();
-  const { activeClub } = useClub();
+  const { activeClub, isReady, userId: currentUserId } = useClub();
   const [clubSpecies, setClubSpecies] = useState<ClubSpecies[]>([]);
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [newName, setNewName] = useState('');
   const [addError, setAddError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [snackbar, setSnackbar] = useState<string | null>(null);
-
-  useEffect(() => {
-    createClient()
-      .auth.getUser()
-      .then(({ data }) => setCurrentUserId(data.user?.id ?? null));
-  }, []);
 
   useEffect(() => {
     if (!activeClub) return;
@@ -73,12 +65,22 @@ export default function ArtregisterPage() {
   }
 
   async function handleDelete(id: string) {
+    const removed = clubSpecies.find((s) => s.id === id);
+    setClubSpecies((prev) => prev.filter((s) => s.id !== id));
     try {
       await deleteClubSpecies(id);
-      setClubSpecies((prev) => prev.filter((s) => s.id !== id));
     } catch {
+      if (removed) setClubSpecies((prev) => [...prev, removed].sort((a, b) => a.name.localeCompare(b.name, 'sv')));
       setSnackbar('Kunde inte ta bort arten. Försök igen.');
     }
+  }
+
+  if (!isReady) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', pt: 8, bgcolor: 'background.default' }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
