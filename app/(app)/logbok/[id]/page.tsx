@@ -127,7 +127,7 @@ export default function FangstDetailPage() {
           {catch_.species}
         </Typography>
         <Typography variant="body1" sx={{ fontFeatureSettings: '"tnum"', fontWeight: 500 }}>
-          {catch_.weight_kg} kg · {catch_.length_cm} cm
+          {catch_.weight_kg * 1000} g · {catch_.length_cm} cm
         </Typography>
         {catch_.bait && (
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>

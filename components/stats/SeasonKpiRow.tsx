@@ -17,7 +17,7 @@ export default function SeasonKpiRow({ stats }: Props) {
     { label: 'Fångster', value: String(stats.seasonCatchCount), sub: 'i år' },
     {
       label: 'Tyngsta',
-      value: stats.heaviestCatch ? `${stats.heaviestCatch.weightKg} kg` : '–',
+      value: stats.heaviestCatch ? `${stats.heaviestCatch.weightKg * 1000} g` : '–',
       sub: stats.heaviestCatch?.species ?? '',
     },
     { label: 'Toppbete', value: stats.topBait ?? '–', sub: 'flest fångster' },

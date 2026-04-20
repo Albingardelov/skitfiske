@@ -124,7 +124,7 @@ export default function SeasonPerformanceSection({ catches }: Props) {
               color: 'text.primary',
             }}
           >
-            {heavy ? `${heavy.weight_kg} kg` : '–'}
+            {heavy ? `${heavy.weight_kg * 1000} g` : '–'}
           </Typography>
           {heavy && (
             <Typography

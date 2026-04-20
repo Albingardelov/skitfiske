@@ -180,7 +180,7 @@ export default function ClubLeaderboard({ data }: Props) {
                     fontFeatureSettings: '"tnum"',
                   }}
                 >
-                  {rec.weightKg} kg
+                  {rec.weightKg * 1000} g
                 </Typography>
                 <Typography
                   sx={{
@@ -252,7 +252,7 @@ export default function ClubLeaderboard({ data }: Props) {
                     fontFeatureSettings: '"tnum"',
                   }}
                 >
-                  {c.weightKg} kg
+                  {c.weightKg * 1000} g
                 </Typography>
               </Box>
             ))}

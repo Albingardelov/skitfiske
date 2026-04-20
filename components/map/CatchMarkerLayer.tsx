@@ -34,7 +34,7 @@ export default function CatchMarkerLayer({ catches, onMapClick }: Props) {
           <Popup>
             <p className="skitfiske-popup-title">{c.species}</p>
             <p className="skitfiske-popup-meta">
-              {c.weight_kg} kg · {c.length_cm} cm
+              {c.weight_kg * 1000} g · {c.length_cm} cm
             </p>
             {c.location_text && (
               <p className="skitfiske-popup-caption">{c.location_text}</p>

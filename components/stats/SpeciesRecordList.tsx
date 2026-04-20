@@ -68,7 +68,7 @@ export default function SpeciesRecordList({ records }: Props) {
               {rec.count}×
             </Typography>
             <Typography sx={{ fontSize: '0.75rem', color: 'text.secondary', fontFeatureSettings: '"tnum"' }}>
-              {rec.heaviestKg} kg
+              {rec.heaviestKg * 1000} g
             </Typography>
             <Typography sx={{ fontSize: '0.75rem', color: 'text.secondary', fontFeatureSettings: '"tnum"' }}>
               {rec.longestCm} cm
