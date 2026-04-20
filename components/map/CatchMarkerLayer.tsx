@@ -2,6 +2,7 @@
 import { CircleMarker, Popup, useMapEvents } from 'react-leaflet';
 import { mapTokens } from '@/lib/mapTokens';
 import type { Catch } from '@/types/catch';
+import { formatWeightG } from '@/lib/formatWeight';
 
 interface Props {
   catches: Catch[];
@@ -34,7 +35,7 @@ export default function CatchMarkerLayer({ catches, onMapClick }: Props) {
           <Popup>
             <p className="skitfiske-popup-title">{c.species}</p>
             <p className="skitfiske-popup-meta">
-              {c.weight_kg * 1000} g · {c.length_cm} cm
+              {formatWeightG(c.weight_kg)} · {c.length_cm} cm
             </p>
             {c.location_text && (
               <p className="skitfiske-popup-caption">{c.location_text}</p>

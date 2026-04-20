@@ -6,6 +6,7 @@ import Avatar from '@mui/material/Avatar';
 import { alpha, useTheme } from '@mui/material/styles';
 import { expedition } from '@/lib/theme/expeditionTokens';
 import type { LeaderboardData } from '@/lib/stats/index';
+import { formatWeightG } from '@/lib/formatWeight';
 
 function initials(name: string): string {
   const parts = name.trim().split(/\s+/);
@@ -180,7 +181,7 @@ export default function ClubLeaderboard({ data }: Props) {
                     fontFeatureSettings: '"tnum"',
                   }}
                 >
-                  {rec.weightKg * 1000} g
+                  {formatWeightG(rec.weightKg)}
                 </Typography>
                 <Typography
                   sx={{
@@ -252,7 +253,7 @@ export default function ClubLeaderboard({ data }: Props) {
                     fontFeatureSettings: '"tnum"',
                   }}
                 >
-                  {c.weightKg * 1000} g
+                  {formatWeightG(c.weightKg)}
                 </Typography>
               </Box>
             ))}

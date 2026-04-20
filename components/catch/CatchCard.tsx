@@ -11,6 +11,7 @@ import { expedition } from '@/lib/theme/expeditionTokens';
 import { scientificNameForSpecies } from '@/lib/speciesLatin';
 import { weatherSummarySv } from '@/lib/weather/format';
 import type { Catch } from '@/types/catch';
+import { formatWeightG } from '@/lib/formatWeight';
 
 interface Props {
   catch: Catch;
@@ -23,9 +24,6 @@ function formatLogbookDate(iso: string) {
   return s.replace(/\./g, '').toUpperCase();
 }
 
-function formatWeightG(kg: number) {
-  return `${new Intl.NumberFormat('sv-SE', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(kg * 1000)} g`;
-}
 
 function LogbookCatchCard({ c }: { c: Catch }) {
   const theme = useTheme();

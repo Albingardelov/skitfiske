@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import type { PersonalStats } from '@/lib/stats/index';
+import { formatWeightG } from '@/lib/formatWeight';
 
 interface Props {
   stats: PersonalStats;
@@ -17,7 +18,7 @@ export default function SeasonKpiRow({ stats }: Props) {
     { label: 'Fångster', value: String(stats.seasonCatchCount), sub: 'i år' },
     {
       label: 'Tyngsta',
-      value: stats.heaviestCatch ? `${stats.heaviestCatch.weightKg * 1000} g` : '–',
+      value: stats.heaviestCatch ? formatWeightG(stats.heaviestCatch.weightKg) : '–',
       sub: stats.heaviestCatch?.species ?? '',
     },
     { label: 'Toppbete', value: stats.topBait ?? '–', sub: 'flest fångster' },

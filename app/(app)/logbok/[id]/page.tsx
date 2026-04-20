@@ -14,6 +14,7 @@ import { fetchCatch } from '@/lib/supabase/catches';
 import { stickyBarSurfaceSx } from '@/lib/appChrome';
 import { weatherSummarySv } from '@/lib/weather/format';
 import type { Catch } from '@/types/catch';
+import { formatWeightG } from '@/lib/formatWeight';
 
 export default function FangstDetailPage() {
   const router = useRouter();
@@ -127,7 +128,7 @@ export default function FangstDetailPage() {
           {catch_.species}
         </Typography>
         <Typography variant="body1" sx={{ fontFeatureSettings: '"tnum"', fontWeight: 500 }}>
-          {catch_.weight_kg * 1000} g · {catch_.length_cm} cm
+          {formatWeightG(catch_.weight_kg)} · {catch_.length_cm} cm
         </Typography>
         {catch_.bait && (
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>

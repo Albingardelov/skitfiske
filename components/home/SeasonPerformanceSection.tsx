@@ -6,6 +6,7 @@ import { useTheme } from '@mui/material/styles';
 import { hemTheme } from '@/lib/hemTheme';
 import type { Catch } from '@/types/catch';
 import { monthOverMonthTrendLabel, heaviestCatch } from '@/lib/catchStats';
+import { formatWeightG } from '@/lib/formatWeight';
 
 interface Props {
   catches: Catch[];
@@ -124,7 +125,7 @@ export default function SeasonPerformanceSection({ catches }: Props) {
               color: 'text.primary',
             }}
           >
-            {heavy ? `${heavy.weight_kg * 1000} g` : '–'}
+            {heavy ? formatWeightG(heavy.weight_kg) : '–'}
           </Typography>
           {heavy && (
             <Typography

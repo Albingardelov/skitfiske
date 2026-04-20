@@ -7,6 +7,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import { useTheme } from '@mui/material/styles';
 import { ChevronDown } from 'lucide-react';
 import type { SpeciesRecord } from '@/lib/stats/index';
+import { formatWeightG } from '@/lib/formatWeight';
 
 interface Props {
   records: SpeciesRecord[];
@@ -68,7 +69,7 @@ export default function SpeciesRecordList({ records }: Props) {
               {rec.count}×
             </Typography>
             <Typography sx={{ fontSize: '0.75rem', color: 'text.secondary', fontFeatureSettings: '"tnum"' }}>
-              {rec.heaviestKg * 1000} g
+              {formatWeightG(rec.heaviestKg)}
             </Typography>
             <Typography sx={{ fontSize: '0.75rem', color: 'text.secondary', fontFeatureSettings: '"tnum"' }}>
               {rec.longestCm} cm
