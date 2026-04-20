@@ -4,7 +4,6 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { alpha } from '@mui/material/styles';
-import { staticBarSurfaceSx } from '@/lib/appChrome';
 import type { Channel } from '@/types/chat';
 
 interface Props {
@@ -16,20 +15,20 @@ interface Props {
 export default function ChatTabs({ channels, activeChannelId, onChannelChange }: Props) {
   return (
     <Box
-      sx={[
-        staticBarSurfaceSx,
-        {
-          flexShrink: 0,
-          px: 2,
-          py: 1,
-          display: 'flex',
-          gap: 1,
-          flexWrap: 'nowrap',
-          overflowX: 'auto',
-          scrollbarWidth: 'none',
-          '&::-webkit-scrollbar': { display: 'none' },
-        },
-      ]}
+      sx={{
+        flexShrink: 0,
+        px: 2,
+        py: 1,
+        display: 'flex',
+        gap: 1,
+        flexWrap: 'nowrap',
+        overflowX: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': { display: 'none' },
+        bgcolor: 'background.paper',
+        borderBottom: '1px solid',
+        borderColor: 'divider',
+      }}
     >
       {channels.map((channel) => {
         const active = channel.id === activeChannelId;
