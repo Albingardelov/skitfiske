@@ -4,9 +4,11 @@ create table if not exists public.club_species (
   club_id    uuid not null references public.clubs(id) on delete cascade,
   name       text not null,
   created_by uuid not null references auth.users(id),
-  created_at timestamptz not null default now(),
-  unique (club_id, lower(name))
+  created_at timestamptz not null default now()
 );
+
+create unique index if not exists club_species_club_name_unique
+  on public.club_species (club_id, lower(name));
 
 create index if not exists club_species_club_id_idx on public.club_species (club_id);
 
