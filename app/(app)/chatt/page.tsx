@@ -63,10 +63,9 @@ function ChattThread({
 }
 
 export default function ChattPage() {
-  const { isReady, activeClub } = useClub();
+  const { isReady, activeClub, userId } = useClub();
   const [channels, setChannels] = useState<Channel[]>([]);
   const [activeChannelId, setActiveChannelId] = useState('');
-  const [userId, setUserId] = useState('');
   const [fullName, setFullName] = useState('');
   const [initError, setInitError] = useState(false);
   const [channelsLoading, setChannelsLoading] = useState(true);
@@ -76,7 +75,6 @@ export default function ChattPage() {
       .auth.getUser()
       .then(({ data: userData }) => {
         if (userData.user) {
-          setUserId(userData.user.id);
           setFullName(userData.user.user_metadata?.full_name ?? 'Anonym');
         }
       })
@@ -131,7 +129,7 @@ export default function ChattPage() {
     );
   }
 
-  if (!isReady || channelsLoading || !userId) {
+  if (!isReady || channelsLoading || !userId || fullName === '') {
     return (
       <Box
         sx={{
@@ -183,7 +181,7 @@ export default function ChattPage() {
       channels={channels}
       activeChannelId={activeChannelId}
       onChannelChange={setActiveChannelId}
-      userId={userId}
+      userId={userId!}
       fullName={fullName}
     />
   );
