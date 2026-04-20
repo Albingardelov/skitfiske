@@ -303,7 +303,7 @@ export default function CatchCard({ catch: c, variant = 'default' }: Props) {
               mb: 0.5,
             }}
           >
-            {c.weight_kg * 1000} g · {c.length_cm} cm
+            {formatWeightG(c.weight_kg)} · {c.length_cm} cm
           </Typography>
           {c.location_text && (
             <Typography variant="body2" sx={{ color: light ? hemTheme.muted : 'text.secondary', mb: 0.5 }}>
