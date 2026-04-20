@@ -53,13 +53,15 @@ export default function MessageInput({ onSend, disabled }: Props) {
     <>
       <Box
         sx={{
-          position: 'sticky',
-          bottom: 0,
-          zIndex: 5,
+          position: 'fixed',
+          left: 0,
+          right: 0,
+          bottom: 'calc(76px + env(safe-area-inset-bottom, 0px))',
+          zIndex: 1100,
           flexShrink: 0,
           px: 2,
           pt: 1.25,
-          pb: 'calc(12px + env(safe-area-inset-bottom, 0px))',
+          pb: 1.25,
           borderTop: '1px solid',
           borderColor: 'divider',
           bgcolor: isLight ? expedition.canvasWarm : 'background.default',
