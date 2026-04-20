@@ -8,9 +8,12 @@ create table if not exists public.club_species (
   unique (club_id, lower(name))
 );
 
+create index if not exists club_species_club_id_idx on public.club_species (club_id);
+
 alter table public.club_species enable row level security;
 
 -- Alla klubbmedlemmar kan läsa
+drop policy if exists "club_species_select" on public.club_species;
 create policy "club_species_select"
   on public.club_species for select
   using (
@@ -22,6 +25,7 @@ create policy "club_species_select"
   );
 
 -- Alla klubbmedlemmar kan lägga till
+drop policy if exists "club_species_insert" on public.club_species;
 create policy "club_species_insert"
   on public.club_species for insert
   with check (
@@ -34,6 +38,7 @@ create policy "club_species_insert"
   );
 
 -- Bara skaparen kan ta bort
+drop policy if exists "club_species_delete" on public.club_species;
 create policy "club_species_delete"
   on public.club_species for delete
   using (created_by = auth.uid());
