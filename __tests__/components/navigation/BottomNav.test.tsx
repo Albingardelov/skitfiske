@@ -22,12 +22,13 @@ beforeEach(() => {
 });
 
 describe('BottomNav', () => {
-  it('renders all four navigation items', () => {
+  it('renders all five navigation items', () => {
     renderWithTheme(<BottomNav />);
     expect(screen.getByText('Hem')).toBeInTheDocument();
     expect(screen.getByText('Chatt')).toBeInTheDocument();
     expect(screen.getByText('Karta')).toBeInTheDocument();
     expect(screen.getByText('Logbok')).toBeInTheDocument();
+    expect(screen.getByText('Arter')).toBeInTheDocument();
   });
 
   it('navigates to /chatt when Chatt tab is clicked', async () => {
@@ -46,5 +47,11 @@ describe('BottomNav', () => {
     renderWithTheme(<BottomNav />);
     await userEvent.click(screen.getByText('Logbok'));
     expect(mockPush).toHaveBeenCalledWith('/logbok');
+  });
+
+  it('navigates to /artregister when Arter tab is clicked', async () => {
+    renderWithTheme(<BottomNav />);
+    await userEvent.click(screen.getByText('Arter'));
+    expect(mockPush).toHaveBeenCalledWith('/artregister');
   });
 });
