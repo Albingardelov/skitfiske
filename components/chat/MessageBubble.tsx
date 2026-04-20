@@ -162,8 +162,15 @@ export default function MessageBubble({ message, isOwn, onDelete, onEdit }: Prop
                 }}
                 sx={{
                   '& .MuiOutlinedInput-root': {
-                    bgcolor: 'rgba(0,0,0,0.2)',
+                    bgcolor: isOwn ? 'rgba(255,255,255,0.15)' : 'background.paper',
                     borderRadius: 2,
+                    color: isOwn ? '#fff' : 'text.primary',
+                  },
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: isOwn ? 'rgba(255,255,255,0.35)' : 'divider',
+                  },
+                  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: isOwn ? 'rgba(255,255,255,0.6)' : 'text.primary',
                   },
                 }}
               />
