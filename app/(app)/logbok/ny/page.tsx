@@ -20,6 +20,7 @@ import { formFieldReadableSx, stickyBarSurfaceSx } from '@/lib/appChrome';
 import type { WeatherSnapshot } from '@/lib/weather/types';
 import { weatherSummarySv } from '@/lib/weather/format';
 import { useClub } from '@/contexts/ClubContext';
+import SpeciesAutocomplete from '@/components/logbok/SpeciesAutocomplete';
 
 function getLocalDatetimeString() {
   const now = new Date();
@@ -233,12 +234,10 @@ function NyFangstForm() {
             innan du sparar en fångst.
           </Typography>
         )}
-        <TextField
-          label="Art *"
+        <SpeciesAutocomplete
           value={species}
-          onChange={(e) => setSpecies(e.target.value)}
-          fullWidth
-          sx={formFieldReadableSx}
+          onChange={setSpecies}
+          clubId={activeClub?.id ?? null}
         />
         <TextField
           label="Vikt (g) *"
