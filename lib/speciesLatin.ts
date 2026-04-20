@@ -16,3 +16,6 @@ export function scientificNameForSpecies(species: string): string | null {
   const key = species.trim();
   return LATIN[key] ?? null;
 }
+
+/** Exporterad lista med globala artnamn för autocomplete och artregister. */
+export const GLOBAL_SPECIES: string[] = Object.keys(LATIN);
