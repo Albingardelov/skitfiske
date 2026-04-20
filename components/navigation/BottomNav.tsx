@@ -3,13 +3,14 @@
 import { usePathname, useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Home, MessageCircle, MapPin, BookOpen } from 'lucide-react';
+import { Home, MessageCircle, MapPin, BookOpen, Fish } from 'lucide-react';
 
 const navItems = [
   { label: 'Hem', icon: Home, route: '/hem' },
   { label: 'Chatt', icon: MessageCircle, route: '/chatt' },
   { label: 'Karta', icon: MapPin, route: '/karta' },
   { label: 'Logbok', icon: BookOpen, route: '/logbok' },
+  { label: 'Arter', icon: Fish, route: '/artregister' },
 ] as const;
 
 export default function BottomNav() {
